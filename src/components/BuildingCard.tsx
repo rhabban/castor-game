@@ -1,17 +1,54 @@
-import {useAppDispatch} from "../store/Hooks";
+import {useAppDispatch, useAppSelector} from "../store/Hooks";
 import {BuildingEntity} from "./BuildingEntity";
 import {deleteBuilding, toggleActivate} from "../store/BuildingSlice";
-import {useContext} from "react";
-import GameContext from "../context/GameContext";
 import {addEventAction} from "../store/EventActionSlice";
 import {EventActionEntity} from "./EventActionEntity";
+import Swal from "sweetalert2";
+import {editWorker} from "../store/WorkerSlice";
+import {useContext} from "react";
+import GameContext from "../context/GameContext";
+import {IWorker} from "./Workers";
 
 const BuildingCard = ({building}: { building: BuildingEntity }) => {
     const gameContext = useContext(GameContext);
+
+    const workerList = useAppSelector((state) => state.worker);
     const dispatch = useAppDispatch();
     console.log("BuildingCard render;")
 
+    const workersToAvailableWorkerOptions = () => {
+        let formattedOptions: { [index: string]: any } = {}
+        workerList.forEach(worker => {
+            if (!worker.isWorking) {
+                formattedOptions[worker.name] = worker.name
+            }
+        })
+        return formattedOptions;
+    }
+
     const onClickToggle = () => {
+        Swal.fire({
+            title: "Affecter un ouvrier",
+            color: "#716add",
+            backdrop: "rgba(0,0,123,0.4)",
+            input: "select",
+            inputOptions: workersToAvailableWorkerOptions(),
+            inputPlaceholder: "Sélectionner...",
+            showCancelButton: true,
+            inputValidator: (value) => {
+                return new Promise((resolve) => {
+                    console.log(value);
+                    workerList.forEach(worker => {
+                        if (worker.name === value) {
+                            let newWorker: IWorker = {...worker, isWorking: true};
+                            dispatch(editWorker(newWorker))
+                            dispatch(addEventAction(new EventActionEntity(worker.name + " est affecté à " + building.name, "worker", gameContext?.turn || 0)))
+                        }
+                    })
+                    resolve();
+                });
+            }
+        });
         dispatch(toggleActivate(building))
         dispatch(addEventAction(new EventActionEntity(building.name + " isEnable= " + building.isEnabled, "building", gameContext?.turn || 0)))
     }

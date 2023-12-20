@@ -11,6 +11,7 @@ export class RessourceEntity {
 
     count: number;
 
+
     constructor(type: RessourceTypeEnum, count: number) {
         this.type = type;
         this.count = count;

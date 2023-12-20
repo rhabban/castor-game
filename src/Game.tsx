@@ -1,89 +1,77 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import Ressources from "./components/Ressources";
 import Buildings from "./components/Buildings";
-import {store} from "./redux/redux";
-import {Provider} from "react-redux";
-import {useAppDispatch, useAppSelector} from "./redux/hooks";
+import {useAppDispatch} from "./store/Hooks";
+import {FaRepeat} from "react-icons/fa6";
+import {addEventAction} from "./store/EventActionSlice";
+import {EventActionEntity} from "./components/EventActionEntity";
+import Logger from "./components/Logger";
 
-function App() {
+import GameContext from "./context/GameContext";
+import useHandleTurn from "./hooks/useHandleTurn";
+import Workers from "./components/Workers";
 
-    const buildingList = useAppSelector((state) => state.building);
+function Game() {
+
     const dispatch = useAppDispatch();
 
+    const [sequence, setSequence] = useState({
+        turn: 0,
+        isProcessing: false,
+    });
 
-    const [intervalId, setIntervalId] = useState<NodeJS.Timer>();
+    const {
+        turn,
+        isProcessing,
+    } = useHandleTurn(sequence);
 
-    const [turn, setTurn] = useState<number>(0);
-    const [isRunning, setIsRunning] = useState<boolean>(false);
-
-
-    useEffect(() => {
-        console.log("App render");
-        //initList();
-    }, []);
-
-    const handleStartStop = () => {
-        setIsRunning(!isRunning);
-
-        /*if (!isRunning && intervalId) {
-            clearInterval(intervalId);
-        } else {
-            const newIntervalId = setInterval(() => {
-                let ressourceMapTmp = new Map<RessourceTypeEnum, number>(refRessourceMap.current);
-                console.log("Old refRessourceMap", ressourceMapTmp);
-
-                /*buildingList.forEach(building => {
-                    if (building.isEnabled) {
-                        const availableStockIn: number = ressourceMapTmp.get(building.ressourceTypeIn) || 0;
-                        const availableStockOut: number = ressourceMapTmp.get(building.ressourceTypeOut) || 0;
-                        ressourceMapTmp.set(building.ressourceTypeIn, availableStockIn - building.quantityIn);
-                        //console.log("IN " + building.name + " -" + building.quantityIn + ":" + building.ressourceTypeIn)
-                        ressourceMapTmp.set(building.ressourceTypeOut, availableStockOut + building.quantityOut);
-                        //console.log("OUT " + building.name + " +" + building.quantityOut + ":" + building.ressourceTypeOut)
-                    }
-                })
-                console.log("New ressourceMapTmp", ressourceMapTmp);
-                setRessourceMap(ressourceMapTmp);
-                console.log("New ressourceMap", ressourceMap);
-                setTurn(prevTurn => prevTurn + 1);
-            }, 2500);
-            setIntervalId(newIntervalId);
-        }
-        clearInterval(intervalId);*/
-
-    }
-    const handleTurn = () => {
-        buildingList.forEach(building => {
-            if (building.isEnabled) {
-                dispatch({
-                    type: "ressource/incrementRessource",
-                    payload: {
-                        ressourceType: building.ressourceTypeOut,
-                        value: building.quantityOut
-                    }
-                })
-            }
-        })
+    const onPlayTurn = () => {
+        dispatch(addEventAction(new EventActionEntity("Fin du tour demandé", "turn", turn)))
+        setSequence({...sequence, turn: turn, isProcessing: true})
     }
 
     return (
-        <Provider store={store}>
-            <div className="container">
-                <Ressources/>
-                <Buildings/>
+        <>
+            <GameContext.Provider value={{turn: turn, isProcessing: isProcessing}}>
                 <div className="container">
-                    <button onClick={() => {
-                        handleTurn()
-                    }}>Fin du tour
-                    </button>
+                    <div className="row">
+                        <div className="col-8">
+                            <div className="row">
+                                <div className="col-5">
+                                    <Ressources/>
+                                </div>
+                                <div className="col-3">
+                                    <Workers/>
+                                </div>
+                                <div className="col-4 align-self-center">
+                                    {!isProcessing ?
+
+                                        <button className={"btn-lg btn-success position-relative "}
+                                                onClick={onPlayTurn}>
+                                            <FaRepeat/> Play
+                                            turn
+                                            <span
+                                                className={"position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"}>{turn.toString()}</span>
+                                        </button>
+                                        : <h1>Loading</h1>
+                                    }
+                                </div>
+
+                            </div>
+                            <div className="row">
+                                <Buildings/>
+                            </div>
+                        </div>
+                        <div className={"col-4"}>
+                            <Logger/>
+                        </div>
+
+                    </div>
                 </div>
-                <div className="container">
-                    <button onClick={handleStartStop}> {isRunning ? 'Stop' : 'Start'} tour {turn} </button>
-                </div>
-            </div>
-        </Provider>
+            </GameContext.Provider>
+        </>
     );
 }
 
-export default App;
+export default Game;

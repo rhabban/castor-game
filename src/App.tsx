@@ -1,26 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect} from 'react';
 import './App.css';
+import {Provider} from "react-redux";
+import Game from "./Game";
+import {store} from "./store/Store";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    useEffect(() => {
+        console.log("App render");
+    }, []);
+
+    return (
+        <Provider store={store}>
+            <Game/>
+        </Provider>
+    );
 }
 
 export default App;

@@ -26,9 +26,12 @@ const ressourceSlice = createSlice({
                 throw Error("Ressource non disponible");
 
             RessourceRecordDraft[action.payload.ressourceType] = newCount;
+        },
+        resetRessource: () => {
+            return iRessourceRecord;
         }
     }
 })
 
 export default ressourceSlice;
-export const {incrementRessource, decrementRessource} = ressourceSlice.actions;
+export const {incrementRessource, decrementRessource, resetRessource} = ressourceSlice.actions;

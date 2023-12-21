@@ -4,7 +4,7 @@ import Ressources from "./components/Ressources";
 import Buildings from "./components/Buildings";
 import {useAppDispatch} from "./store/Hooks";
 import {FaRepeat} from "react-icons/fa6";
-import {addEventAction} from "./store/EventActionSlice";
+import {addEventAction, resetEventAction} from "./store/EventActionSlice";
 import {EventActionEntity} from "./components/EventActionEntity";
 import Logger from "./components/Logger";
 
@@ -12,6 +12,9 @@ import GameContext from "./context/GameContext";
 import useHandleTurn from "./hooks/useHandleTurn";
 import Workers from "./components/Workers";
 import Missions from "./components/mission/Missions";
+import {resetMissionList} from "./store/MissionSlice";
+import {resetRessource} from "./store/RessourceSlice";
+import {resetWorkerList} from "./store/WorkerSlice";
 
 function Game({setEndGame}: { setEndGame: Function }) {
 
@@ -30,6 +33,14 @@ function Game({setEndGame}: { setEndGame: Function }) {
         isProcessing,
         isTerminated
     } = useHandleTurn(sequence);
+
+    useEffect(() => {
+        dispatch(resetMissionList());
+        dispatch(resetRessource());
+        dispatch(resetWorkerList());
+        dispatch(resetEventAction());
+        setSequence(initSequence);
+    }, []);
 
     useEffect(() => {
         if (isTerminated === true) {

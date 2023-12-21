@@ -19,10 +19,14 @@ const missionSlice = createSlice({
                 return mission;
             });
             return newMissionList
+        },
+
+        resetMissionList: (state) => {
+            return initMissionList;
         }
 
     }
 })
-export const {completeMission} = missionSlice.actions;
+export const {completeMission, resetMissionList} = missionSlice.actions;
 
 export default missionSlice;

@@ -15,9 +15,12 @@ const workerSlice = createSlice({
                 return worker;
             });
             return newWorkerList;
+        },
+        resetWorkerList: () => {
+            return initWorkerList
         }
     }
 })
-export const {editWorker} = workerSlice.actions;
+export const {editWorker, resetWorkerList} = workerSlice.actions;
 
 export default workerSlice;

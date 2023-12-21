@@ -35,13 +35,15 @@ export default function useHandleTurn(sequence: sequence) {
     }, [turn]);
 
     useEffect(() => {
-        const activeMission = missionList.filter(mission =>
-            !mission.isCompleted
-        )
-        if (activeMission.length === 0) {
-            setIsProcessing(false);
-            setIsTerminated(true);
-            fireVictory();
+        if (turn > 0) {
+            const activeMission = missionList.filter(mission =>
+                !mission.isCompleted
+            )
+            if (activeMission.length === 0) {
+                setIsProcessing(false);
+                setIsTerminated(true);
+                fireVictory();
+            }
         }
 
     }, [missionList]);

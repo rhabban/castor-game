@@ -9,20 +9,29 @@ function App() {
 
     const [isGame, setIsGame] = useState(false)
 
+
     useEffect(() => {
         console.log("App render");
-    }, []);
+    }, [isGame]);
+
+    const onNewGame = (bool: boolean) => {
+        setIsGame(true);
+    };
 
 
     return (
         !isGame ?
             <>
-                <div className="col-12 align-self-center">
-                    <button className={"btn-lg btn-success position-relative "}
-                            onClick={() => setIsGame(true)}>
-                        New GAME
+                <div className={"container"} style={{marginTop: "100px"}}>
+                    <div className={"row"}>
+                        <div className="d-grid gap-2 col-4 mx-auto">
+                            <button className="btn btn-primary" type="button"
+                                    onClick={() => onNewGame(true)}>
+                                New GAME
 
-                    </button>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </>
             :

@@ -1,16 +1,20 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {EventActionEntity} from "../components/EventActionEntity";
 
+const initialState = new Array<EventActionEntity>();
+
 const eventActionSlice = createSlice({
     name: "eventAction",
-    initialState: new Array<EventActionEntity>(),
+    initialState: initialState,
     reducers: {
         addEventAction: (eventActionState, action) => {
             eventActionState.push(action.payload);
-            console.log('addEventAction');
+        },
+        resetEventAction: () => {
+            return initialState;
         }
     }
 })
-export const {addEventAction} = eventActionSlice.actions;
+export const {addEventAction, resetEventAction} = eventActionSlice.actions;
 
 export default eventActionSlice;

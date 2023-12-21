@@ -41,6 +41,9 @@ const buildingSlice = createSlice({
         deleteBuilding: (buildingListState, action) => {
 
             return buildingListState.filter(building => building.id !== action.payload.id);
+        },
+        resetBuildingList: (state) => {
+            return iBuildingList;
         }
     }
 })
@@ -49,7 +52,8 @@ export const {
     addBuilding,
     deleteBuilding,
     addWorkerToBuilding,
-    removeWorkerFromBuilding
+    removeWorkerFromBuilding,
+    resetBuildingList
 } = buildingSlice.actions;
 
 export default buildingSlice;

@@ -1,6 +1,7 @@
 import {v4 as uuidv4} from "uuid";
 import {RessourceTypeEnum} from "../Ressource";
 import {useAppSelector} from "../../store/Hooks";
+import {useEffect} from "react";
 
 
 export interface IMission {
@@ -50,12 +51,16 @@ const Missions = () => {
 
     console.log("Missions render", missionList)
 
+    useEffect(() => {
+        console.log("missionList", missionList)
+    }, [missionList]);
+
     return (
         <>
             <h3>Mes missions</h3>
             {
                 missionList.map((mission: IMission) => (
-                    <MissionCheck mission={mission} ressourceRecord={ressourceRecord}/>
+                    <MissionCheck key={mission.id} mission={mission} ressourceRecord={ressourceRecord}/>
                 ))
             }
         </>

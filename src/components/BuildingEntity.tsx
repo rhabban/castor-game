@@ -15,6 +15,8 @@ export class BuildingEntity {
 
     isEnabled: boolean;
 
+    workersId: Array<string>;
+
     constructor(name: string, ressourceTypeOut: RessourceTypeEnum, quantityOut: number, ressourceTypeIn: RessourceTypeEnum, quantityIn: number) {
         this.id = uuidv4();
         this.name = name;
@@ -23,6 +25,7 @@ export class BuildingEntity {
         this.ressourceTypeIn = ressourceTypeIn;
         this.quantityIn = quantityIn;
         this.isEnabled = false;
+        this.workersId = [];
     }
 
     static copy(building: BuildingEntity) {

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import Ressources from "./components/Ressources";
 import Buildings from "./components/Buildings";
@@ -11,20 +11,32 @@ import Logger from "./components/Logger";
 import GameContext from "./context/GameContext";
 import useHandleTurn from "./hooks/useHandleTurn";
 import Workers from "./components/Workers";
+import Missions from "./components/mission/Missions";
 
-function Game() {
+function Game({setEndGame}: { setEndGame: Function }) {
 
     const dispatch = useAppDispatch();
 
-    const [sequence, setSequence] = useState({
+    const initSequence = {
         turn: 0,
         isProcessing: false,
-    });
+        isTerminated: false
+    }
+
+    const [sequence, setSequence] = useState(initSequence);
 
     const {
         turn,
         isProcessing,
+        isTerminated
     } = useHandleTurn(sequence);
+
+    useEffect(() => {
+        if (isTerminated === true) {
+            console.log('le jeu est terminé')
+            setEndGame();
+        }
+    }, [isTerminated]);
 
     const onPlayTurn = () => {
         dispatch(addEventAction(new EventActionEntity("Fin du tour demandé", "turn", turn)))
@@ -64,12 +76,14 @@ function Game() {
                             </div>
                         </div>
                         <div className={"col-4"}>
+                            <Missions/>
                             <Logger/>
                         </div>
 
                     </div>
                 </div>
             </GameContext.Provider>
+
         </>
     );
 }

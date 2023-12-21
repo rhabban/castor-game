@@ -15,7 +15,7 @@ const Buildings = () => {
             <div className="row">
                 {
                     buildingList.map((build) => (
-                        <BuildingCard building={build}/>
+                        <BuildingCard key={build.id} building={build}/>
                     ))
                 }
             </div>

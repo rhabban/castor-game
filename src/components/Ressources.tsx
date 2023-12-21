@@ -45,7 +45,7 @@ const Ressources = () => {
                 <tbody>
                 {
                     Object.keys(ressourceRecord).map((ressource) => (
-                        <tr>
+                        <tr key={ressource}>
                             <td>{ressource}</td>
                             <td>{ressourceRecord[ressource]}</td>
                             <td>

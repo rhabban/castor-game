@@ -1,26 +1,39 @@
 import React from "react";
 import {useAppSelector} from "../store/Hooks";
+import {v4 as uuidv4} from "uuid";
 
 export interface IWorker {
+    id: string;
+
     name: string;
-    isWorking: boolean;
+    buildingId: string | null;
 }
 
 export class Worker implements IWorker {
-    name;
-    isWorking;
+    id: string;
 
-    constructor(name: string, isWorking: boolean) {
+    name;
+    buildingId: string | null;
+
+    constructor(name: string) {
+        this.id = uuidv4();
+
         this.name = name;
-        this.isWorking = isWorking;
+        this.buildingId = null;
     }
 }
 
 export const Workers = () => {
 
     const workerList = useAppSelector((state) => state.worker);
+    const buildingList = useAppSelector((state) => state.building);
 
     console.log("Workers render")
+
+    const calculateBuildingName = (buildingId: string | null) => {
+        const selectedBuilding = buildingList.find((building) => (building.id === buildingId));
+        return selectedBuilding?.name;
+    }
 
     if (!workerList)
         return <></>
@@ -33,15 +46,15 @@ export const Workers = () => {
                 <thead>
                 <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Poste</th>
                 </tr>
                 </thead>
                 <tbody>
                 {
                     workerList.map((worker) => (
-                        <tr>
+                        <tr key={worker.id}>
                             <td>{worker.name}</td>
-                            <td>{worker.isWorking.toString()}</td>
+                            <td>{calculateBuildingName(worker.buildingId)}</td>
                         </tr>
                     ))
                 }

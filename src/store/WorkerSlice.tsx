@@ -1,7 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {IWorker} from "../components/Workers";
+import {IWorker, Worker} from "../components/Workers";
 
-const initWorkerList: IWorker[] = [{name: "Coco", isWorking: false}, {name: "Hugo", isWorking: false}];
+const initWorkerList: IWorker[] = [new Worker("Coco"), new Worker("Hugo")];
 
 const workerSlice = createSlice({
     name: "worker",
@@ -15,7 +15,6 @@ const workerSlice = createSlice({
                 return worker;
             });
             return newWorkerList;
-            console.log("editWorker reducer");
         }
     }
 })

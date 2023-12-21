@@ -3,12 +3,14 @@ import ressourceSlice from "./RessourceSlice";
 import buildingSlice from "./BuildingSlice";
 import eventAction from "./EventActionSlice";
 import workerSlice from "./WorkerSlice";
+import missionSlice from "./MissionSlice";
 
 export const store = configureStore({
     reducer: {
         ressource: ressourceSlice.reducer,
         building: buildingSlice.reducer,
         worker: workerSlice.reducer,
+        mission: missionSlice.reducer,
         eventAction: eventAction.reducer
     },
     middleware: (getDefaultMiddleware) =>

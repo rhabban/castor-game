@@ -1,4 +1,5 @@
 import Swal from "sweetalert2";
+import {IMission} from "../components/mission/Missions";
 
 export const wait = (ms: number) => {
     return new Promise(resolve => {
@@ -17,22 +18,27 @@ export const fireEndTourEvent = (turn: number) => {
     })
 }
 
-/*export const attack = ({attacker, receiver}) => {
-    const receivedDamage =
-        attacker.attack - (attacker.level - receiver.level) * 1.25;
+export const fireMissionSuccessful = (mission: IMission) => {
+    Swal.fire({
+        icon: 'success',
+        text: "Mission terminée : " + mission.name,
+        toast: true,
+        position: 'center'
+    })
+}
 
-    const finalDamage = receivedDamage - receiver.defense / 2;
-
-    return finalDamage;
-};
-export const magic = ({attacker, receiver}) => {
-    const receivedDamage =
-        attacker.magic - (attacker.level - receiver.level) * 1.25;
-
-    const finalDamage = receivedDamage - receiver.magicDefense / 2;
-
-    return finalDamage;
-};
-export const heal = ({receiver}) => {
-    return receiver.magic + receiver.level * 0.25;
-};*/
+export const fireVictory = () => {
+    Swal.fire({
+        title: "Victoire !",
+        width: 600,
+        padding: "3em",
+        color: "#716add",
+        background: "#fff url(/images/trees.png)",
+        backdrop: `
+    rgba(0,0,123,0.4)
+    url("/logo192.png")
+    left top
+    no-repeat
+  `
+    });
+}

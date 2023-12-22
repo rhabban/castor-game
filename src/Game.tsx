@@ -3,7 +3,7 @@ import './App.css';
 import Ressources from "./components/Ressources";
 import Buildings from "./components/Buildings";
 import {useAppDispatch} from "./store/Hooks";
-import {FaRepeat} from "react-icons/fa6";
+import {FaForwardStep} from "react-icons/fa6";
 import {addEventAction, resetEventAction} from "./store/EventActionSlice";
 import {EventActionEntity} from "./components/EventActionEntity";
 import Logger from "./components/Logger";
@@ -15,6 +15,7 @@ import Missions from "./components/mission/Missions";
 import {resetMissionList} from "./store/MissionSlice";
 import {resetRessource} from "./store/RessourceSlice";
 import {resetWorkerList} from "./store/WorkerSlice";
+import {FaDoorOpen} from "react-icons/fa";
 
 function Game({setEndGame}: { setEndGame: Function }) {
 
@@ -49,9 +50,13 @@ function Game({setEndGame}: { setEndGame: Function }) {
         }
     }, [isTerminated]);
 
-    const onPlayTurn = () => {
+    const onClickPlayTurn = () => {
         dispatch(addEventAction(new EventActionEntity("Fin du tour demandé", "turn", turn)))
         setSequence({...sequence, turn: turn, isProcessing: true})
+    }
+
+    const onClickEndGame = () => {
+        setEndGame();
     }
 
     return (
@@ -68,17 +73,7 @@ function Game({setEndGame}: { setEndGame: Function }) {
                                     <Workers/>
                                 </div>
                                 <div className="col-4 align-self-center">
-                                    {!isProcessing ?
 
-                                        <button className={"btn-lg btn-success position-relative "}
-                                                onClick={onPlayTurn}>
-                                            <FaRepeat/> Play
-                                            turn
-                                            <span
-                                                className={"position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"}>{turn.toString()}</span>
-                                        </button>
-                                        : <h1>Loading</h1>
-                                    }
                                 </div>
 
                             </div>
@@ -90,9 +85,28 @@ function Game({setEndGame}: { setEndGame: Function }) {
                             <Missions/>
                             <Logger/>
                         </div>
-
                     </div>
                 </div>
+                <nav className="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
+                    <div className={"row mx-auto col-3"}>
+                        <div className="col-6 text-center">
+                            <button className={"btn btn-lg btn-success position-relative"}
+                                    onClick={onClickPlayTurn} disabled={isProcessing}>
+                                <FaForwardStep/> Play
+                                turn
+                                <span
+                                    className={"position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"}>{turn.toString()}</span>
+                            </button>
+                        </div>
+                        <div className="col-6 text-center">
+                            <button className={"btn btn-lg btn-danger position-relative"}
+                                    onClick={onClickEndGame}>
+                                <FaDoorOpen/> Exit Game
+                            </button>
+                        </div>
+                    </div>
+
+                </nav>
             </GameContext.Provider>
 
         </>

@@ -47,52 +47,44 @@ export class StockMission extends Mission {
 const Missions = () => {
 
     const missionList = useAppSelector((state) => state.mission);
-    const ressourceRecord = useAppSelector((state) => state.ressource);
 
     console.log("Missions render", missionList)
 
     useEffect(() => {
         console.log("missionList", missionList)
+
     }, [missionList]);
 
     return (
         <>
             <h3>Mes missions</h3>
             {
-                missionList.map((mission: IMission) => (
-                    <MissionCheck key={mission.id} mission={mission} ressourceRecord={ressourceRecord}/>
+                missionList?.map((mission: IMission) => (
+                    <MissionCheck key={mission.id} mission={mission}/>
                 ))
             }
         </>
     )
 }
 
-const MissionCheck = ({mission, ressourceRecord}: {
+const MissionCheck = ({mission}: {
     mission: IMission,
-    ressourceRecord: Record<RessourceTypeEnum, number>
 }) => {
+
 
     console.log("MissionCheck render")
 
+    useEffect(() => {
+        console.log("mission", mission)
+    }, [mission]);
+
     return (
         <div className="form-check form-switch">
-            {
-                mission.isCompleted ?
-                    <>
-                        <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
-                               checked
-                               disabled/>
-                        <label className="form-check-label" htmlFor="flexSwitchCheckChecked">
-                            {mission.name}</label>
-                    </>
-                    :
-                    <>
-                        <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
-                               disabled/>
-                        <label className="form-check-label" htmlFor="flexSwitchCheckChecked" style={{opacity: 1}}>
-                            {mission.name}</label>
-                    </>
-            }
+            <input className="form-check-input" type="checkbox" role="switch"
+                   checked={mission.isCompleted}
+                   disabled={true}/>
+            <label className="form-check-label" style={{opacity: (mission.isCompleted ? 0.5 : 1)}}>
+                {mission.name} completed</label>
         </div>
     )
 }

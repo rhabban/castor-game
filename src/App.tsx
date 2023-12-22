@@ -25,7 +25,7 @@ function App() {
                 <div className={"container"} style={{marginTop: "100px"}}>
                     <div className={"row"}>
                         <div className="d-grid gap-2 col-4 mx-auto">
-                            <button className="btn btn-primary" type="button"
+                            <button className="btn btn-lg btn-success" type="button"
                                     onClick={() => onNewGame(true)}>
                                 New GAME
 

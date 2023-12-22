@@ -1,5 +1,5 @@
 import {useAppDispatch, useAppSelector} from "../store/Hooks";
-import {decrementRessource, incrementRessource} from "../store/RessourceSlice";
+import {decrementRessource, incrementAsync, incrementRessource} from "../store/RessourceSlice";
 import {addEventAction} from "../store/EventActionSlice";
 import {EventActionEntity} from "./EventActionEntity";
 import {useContext} from "react";
@@ -16,10 +16,11 @@ const Ressources = () => {
 
 
     const onClickAdd = (ressource: string, value: number) => {
-        dispatch(incrementRessource({
+        /*dispatch(incrementRessource({
             "ressourceType": ressource,
             "value": value
-        }))
+        }))*/
+        dispatch(incrementAsync({ressource, value}))
         dispatch(addEventAction(new EventActionEntity("Ajout " + value + " " + ressource, "incrementRessource", gameContext?.turn || 0)))
 
     }

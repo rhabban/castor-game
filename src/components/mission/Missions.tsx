@@ -1,7 +1,6 @@
 import {v4 as uuidv4} from "uuid";
-import {RessourceTypeEnum} from "../Ressource";
-import {useAppSelector} from "../../store/Hooks";
-import {useEffect} from "react";
+import {RessourceType, RessourceTypeEnum} from "../ressource/Ressource";
+import {useAppSelector} from "../../store/storeHooks";
 
 
 export interface IMission {
@@ -30,36 +29,34 @@ export abstract class Mission implements IMission {
 
 export class StockMission extends Mission {
 
-    targetResource: RessourceTypeEnum;
+    targetRessource: RessourceTypeEnum;
     targetStock: number;
 
     constructor(name: string, targetResource: RessourceTypeEnum, targetStock: number) {
         super(name);
-        this.targetResource = targetResource
+        this.targetRessource = targetResource
         this.targetStock = targetStock
     }
 
-    validate = (payload: Record<RessourceTypeEnum, number>) => {
-        return payload[this.targetResource] >= this.targetStock
+    validate = (payload: RessourceType[]) => {
+        const expectedRessource = payload.find(ressource => ressource.type === this.targetRessource)
+        return expectedRessource
+            && expectedRessource.quantity >= this.targetStock;
+
     }
 }
 
 const Missions = () => {
 
-    const missionList = useAppSelector((state) => state.mission);
+    const missions = useAppSelector((state) => state.missions);
 
-    console.log("Missions render", missionList)
-
-    useEffect(() => {
-        console.log("missionList", missionList)
-
-    }, [missionList]);
+    console.log("Missions render")
 
     return (
         <>
-            <h3>Mes missions</h3>
+            <h3>Missions</h3>
             {
-                missionList?.map((mission: IMission) => (
+                missions?.map((mission: IMission) => (
                     <MissionCheck key={mission.id} mission={mission}/>
                 ))
             }
@@ -71,12 +68,7 @@ const MissionCheck = ({mission}: {
     mission: IMission,
 }) => {
 
-
     console.log("MissionCheck render")
-
-    useEffect(() => {
-        console.log("mission", mission)
-    }, [mission]);
 
     return (
         <div className="form-check form-switch">
@@ -84,7 +76,7 @@ const MissionCheck = ({mission}: {
                    checked={mission.isCompleted}
                    disabled={true}/>
             <label className="form-check-label" style={{opacity: (mission.isCompleted ? 0.5 : 1)}}>
-                {mission.name} completed</label>
+                {mission.name}</label>
         </div>
     )
 }

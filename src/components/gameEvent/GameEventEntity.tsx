@@ -1,6 +1,6 @@
 import {v4 as uuidv4} from "uuid";
 
-export class EventActionEntity {
+export class GameEventEntity {
     id: string;
     timestamp: Date;
 

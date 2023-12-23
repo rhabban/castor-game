@@ -1,15 +1,17 @@
-import {createSlice} from "@reduxjs/toolkit";
-import {RessourceTypeEnum} from "../components/Ressource";
-import {BuildingEntity} from "../components/BuildingEntity";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {RessourceTypeEnum} from "../ressource/Ressource";
+import {BuildingEntity} from "./BuildingEntity";
 
-
-const build1: BuildingEntity = new BuildingEntity("scierie", RessourceTypeEnum.PLANCHE, 1, RessourceTypeEnum.BOIS, 5);
-const build2: BuildingEntity = new BuildingEntity("carrière", RessourceTypeEnum.PIERRE, 2, RessourceTypeEnum.PIERRE, 0);
-const iBuildingList: Array<BuildingEntity> = [build1, build2]
+const initBuildings = () => {
+    return [
+        new BuildingEntity("scierie", RessourceTypeEnum.PLANCHE, 1, RessourceTypeEnum.BOIS, 5),
+        new BuildingEntity("carrière", RessourceTypeEnum.PIERRE, 2, RessourceTypeEnum.PIERRE, 0)
+    ]
+}
 
 const buildingSlice = createSlice({
     name: "building",
-    initialState: iBuildingList,
+    initialState: initBuildings(),
     reducers: {
         toggleActivate: (buildingListState, action) => {
             const idxSelectedBuilding = buildingListState.findIndex(building => building.id === action.payload.id);
@@ -27,11 +29,10 @@ const buildingSlice = createSlice({
                 return building;
             })
         },
-        removeWorkerFromBuilding: (buildingListState, action) => {
-            return buildingListState.map((building) => {
-                if (building.id === action.payload.buildingId) {
-                    building.workersId = building.workersId.filter(workerId => workerId !== action.payload.workerId);
-                }
+        removeAllWorkerFromBuilding: (state, action: PayloadAction<string>) => {
+            return state.map((building) => {
+                if (building.id === action.payload)
+                    building.workersId = []
                 return building;
             })
         },
@@ -39,11 +40,10 @@ const buildingSlice = createSlice({
             buildingListState.push(new BuildingEntity("foret", RessourceTypeEnum.BOIS, 10, RessourceTypeEnum.BOIS, 0))
         },
         deleteBuilding: (buildingListState, action) => {
-
             return buildingListState.filter(building => building.id !== action.payload.id);
         },
-        resetBuildingList: (state) => {
-            return iBuildingList;
+        resetBuildingList: () => {
+            return initBuildings();
         }
     }
 })
@@ -52,7 +52,7 @@ export const {
     addBuilding,
     deleteBuilding,
     addWorkerToBuilding,
-    removeWorkerFromBuilding,
+    removeAllWorkerFromBuilding,
     resetBuildingList
 } = buildingSlice.actions;
 

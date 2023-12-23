@@ -1,5 +1,5 @@
-import {useAppDispatch, useAppSelector} from "../store/Hooks";
-import React from "react";
+import {useAppDispatch, useAppSelector} from "../../store/storeHooks";
+import React, {useEffect} from "react";
 import BuildingCard from "./BuildingCard";
 
 const Buildings = () => {
@@ -7,6 +7,10 @@ const Buildings = () => {
     const buildingList = useAppSelector((state) => state.building);
 
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        console.log("buildingList updated", buildingList)
+    }, [buildingList]);
 
     console.log("Buildings render")
     return (
@@ -19,6 +23,7 @@ const Buildings = () => {
                     ))
                 }
             </div>
+            <h3>Constuire un batiment</h3>
             <button onClick={() => dispatch({
                 type: "building/addBuilding",
                 payload: true

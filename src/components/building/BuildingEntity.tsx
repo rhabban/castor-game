@@ -1,7 +1,22 @@
-import {RessourceTypeEnum} from "./Ressource";
+import {RessourceTypeEnum} from "../ressource/Ressource";
 import cloneDeep from "lodash.clonedeep";
 
 import {v4 as uuidv4} from 'uuid';
+
+export type BuildingType = () => {
+    id: string;
+    name: string;
+
+    ressourceTypeOut: RessourceTypeEnum;
+    quantityOut: number;
+
+    ressourceTypeIn: RessourceTypeEnum;
+    quantityIn: number;
+
+    isEnabled: boolean;
+
+    workersId: Array<string>;
+}
 
 export class BuildingEntity {
     id: string;

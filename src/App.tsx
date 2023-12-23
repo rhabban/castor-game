@@ -2,16 +2,15 @@ import React, {useEffect, useState} from 'react';
 import './App.css';
 import {Provider} from "react-redux";
 import Game from "./Game";
-import {store} from "./store/Store";
+import {store} from "./store/store";
 
 
 function App() {
 
     const [isGame, setIsGame] = useState(false)
 
-
     useEffect(() => {
-        console.log("App render");
+        console.log("App isGame changed");
     }, [isGame]);
 
     const onNewGame = (bool: boolean) => {

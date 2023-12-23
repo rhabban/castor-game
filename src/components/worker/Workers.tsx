@@ -1,5 +1,5 @@
 import React from "react";
-import {useAppSelector} from "../store/Hooks";
+import {useAppSelector} from "../../store/storeHooks";
 import {v4 as uuidv4} from "uuid";
 
 export interface IWorker {
@@ -25,7 +25,7 @@ export class Worker implements IWorker {
 
 export const Workers = () => {
 
-    const workerList = useAppSelector((state) => state.worker);
+    const workerList = useAppSelector((state) => state.workers);
     const buildingList = useAppSelector((state) => state.building);
 
     console.log("Workers render")
@@ -40,7 +40,7 @@ export const Workers = () => {
 
     return (
         <>
-            <h3>Mes ouvriers</h3>
+            <h3>Workers</h3>
 
             <table className={"table"}>
                 <thead>

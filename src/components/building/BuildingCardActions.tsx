@@ -7,6 +7,8 @@ import {GameEventEntity} from "../gameEvent/GameEventEntity";
 import workersSlice, {editWorker} from "../worker/workersSlice";
 import buildingSlice, {addWorkerToBuilding, deleteBuilding, toggleActivate} from "./buildingSlice";
 import GameContext from "../../context/GameContext";
+import {RessourceError} from "../../error/customErrors";
+import {fireRessourceError} from "../../helpers/helper";
 
 const BuildingCardActions = ({building, availableWorkers}: {
     building: BuildingEntity,
@@ -32,11 +34,20 @@ const BuildingCardActions = ({building, availableWorkers}: {
     }
 
     const onClickDelete = () => {
-        if (building.workersId.length > 0)
-            throw Error("Veuillez retirer les ouvriers")
-        dispatch(deleteBuilding(building));
-        dispatch(addGameEvent(new GameEventEntity(building.name + " has been removed", "building", gameContext?.turn || 0)))
+        (async () => {
+            dispatch(deleteBuilding(building));
+        })().then((res) => {
+            dispatch(addGameEvent(new GameEventEntity(building.name + " has been removed", "building", gameContext?.turn || 0)))
+        }).catch((err: RessourceError) => {
+            dispatch(addGameEvent(new GameEventEntity("Manque de " + err.ressourceType + " pour terminer le tour", "turn", gameContext?.turn || 0)))
+            fireRessourceError(err.message)
+
+        }).catch((err) => {
+            throw err
+        });
+
     }
+
 
     return (
         <>

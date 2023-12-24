@@ -35,6 +35,14 @@ export const fireRessourceError = (message: string) => {
     });
 }
 
+export const fireWorkerError = (message: string) => {
+    Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: message
+    });
+}
+
 export const fireVictory = (callback: () => void) => {
     Swal.fire({
         title: "Victoire !",

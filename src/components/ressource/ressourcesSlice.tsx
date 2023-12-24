@@ -36,8 +36,7 @@ const ressourcesSlice = createSlice({
 
                     if (newQty < 0)
                         throw new RessourceError("Not enough " + action.payload.ressourceType, action.payload.ressourceType);
-
-
+                    
                     ressource = {...ressource, quantity: (ressource.quantity - action.payload.quantity)};
                     newRessource = false;
                 }

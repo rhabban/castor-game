@@ -84,7 +84,6 @@ export default function useHandleTurn(sequence: sequence) {
 
     const calculateRessources = () => {
         buildingList.forEach(building => {
-
             if (building.isEnabled) {
                 dispatch(decrementRessource({
                     ressourceType: building.ressourceTypeIn,
@@ -97,7 +96,6 @@ export default function useHandleTurn(sequence: sequence) {
                     quantity: building.quantityOut
                 }))
                 dispatch(addGameEvent(new GameEventEntity(building.name + " produit " + building.quantityOut + " " + building.ressourceTypeOut, "incrementRessource", turn)))
-
             }
         })
     }

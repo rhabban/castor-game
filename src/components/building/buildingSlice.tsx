@@ -1,6 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RessourceTypeEnum} from "../ressource/Ressource";
 import {BuildingEntity} from "./BuildingEntity";
+import WorkerError from "../../error/WorkerError";
 
 const initBuildings = () => {
     return [
@@ -40,6 +41,8 @@ const buildingSlice = createSlice({
             buildingListState.push(new BuildingEntity("foret", RessourceTypeEnum.BOIS, 10, RessourceTypeEnum.BOIS, 0))
         },
         deleteBuilding: (buildingListState, action) => {
+            if (action.payload.workersId.length > 0)
+                throw new WorkerError("Veuillez retirer les ouvriers");
             return buildingListState.filter(building => building.id !== action.payload.id);
         },
         resetBuildingList: () => {

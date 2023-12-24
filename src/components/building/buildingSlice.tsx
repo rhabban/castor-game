@@ -1,13 +1,13 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {RessourceTypeEnum} from "../ressource/Ressource";
-import {BuildingEntity} from "./BuildingEntity";
 import WorkerError from "../../error/WorkerError";
+import {BuildingPrototype, BuildingTypeEnum} from "./model/BuildingPrototype";
+import BuildingStore from "./model/BuildingStore";
 
 const initBuildings = () => {
-    return [
-        new BuildingEntity("scierie", RessourceTypeEnum.PLANCHE, 1, RessourceTypeEnum.BOIS, 5),
-        new BuildingEntity("carrière", RessourceTypeEnum.PIERRE, 2, RessourceTypeEnum.PIERRE, 0)
-    ]
+    return new Array<BuildingPrototype>(
+        BuildingStore.getInstance().getPrototype(BuildingTypeEnum.LUMBER_CAMP).clone(),
+        BuildingStore.getInstance().getPrototype(BuildingTypeEnum.LUMBER_MILL).clone(),
+    )
 }
 
 const buildingSlice = createSlice({
@@ -15,15 +15,21 @@ const buildingSlice = createSlice({
     initialState: initBuildings(),
     reducers: {
         toggleActivate: (buildingListState, action) => {
-            const idxSelectedBuilding = buildingListState.findIndex(building => building.id === action.payload.id);
-            let selectedBuilding: BuildingEntity = BuildingEntity.copy(buildingListState[idxSelectedBuilding]);
-            if (selectedBuilding) {
-                selectedBuilding.isEnabled = !selectedBuilding.isEnabled
-            }
+            const idxSelectedBuilding: number = buildingListState.findIndex(building => building?.id === action.payload.id);
+
+            if (!idxSelectedBuilding === undefined || !buildingListState[idxSelectedBuilding] === undefined)
+                throw Error;
+
+            let selectedBuilding = buildingListState[idxSelectedBuilding]?.clone();
+
+            if (!selectedBuilding)
+                throw Error;
+            selectedBuilding.isEnabled = !selectedBuilding.isEnabled;
             buildingListState[idxSelectedBuilding] = selectedBuilding;
+
         },
-        addWorkerToBuilding: (buildingListState, action) => {
-            buildingListState.map((building) => {
+        addWorkerToBuilding: (state, action) => {
+            return state.map((building) => {
                 if (building.id === action.payload.buildingId) {
                     building.workersId.push(action.payload.workerId);
                 }
@@ -37,8 +43,8 @@ const buildingSlice = createSlice({
                 return building;
             })
         },
-        addBuilding: (buildingListState, action) => {
-            buildingListState.push(new BuildingEntity("foret", RessourceTypeEnum.BOIS, 10, RessourceTypeEnum.BOIS, 0))
+        addBuilding: (buildingListState, action: PayloadAction<BuildingTypeEnum>) => {
+            buildingListState.push(BuildingStore.getInstance().getPrototype(action.payload))
         },
         deleteBuilding: (buildingListState, action) => {
             if (action.payload.workersId.length > 0)

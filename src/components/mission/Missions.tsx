@@ -1,5 +1,5 @@
 import {v4 as uuidv4} from "uuid";
-import {RessourceType, RessourceTypeEnum} from "../ressource/Ressource";
+import {RessourcePrototype, RessourceTypeEnum} from "../ressource/model/RessourcePrototype";
 import {useAppSelector} from "../../store/storeHooks";
 
 
@@ -38,7 +38,7 @@ export class StockMission extends Mission {
         this.targetStock = targetStock
     }
 
-    validate = (payload: RessourceType[]) => {
+    validate = (payload: RessourcePrototype[]) => {
         const expectedRessource = payload.find(ressource => ressource.type === this.targetRessource)
         return expectedRessource
             && expectedRessource.quantity >= this.targetStock;

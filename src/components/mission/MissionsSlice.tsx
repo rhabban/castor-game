@@ -1,11 +1,11 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {StockMission} from "./Missions";
-import {RessourceTypeEnum} from "../ressource/Ressource";
+import {RessourceTypeEnum} from "../ressource/model/RessourcePrototype";
 
 const initMissionList = () => {
     return [
-        new StockMission("Collecter 10 bois", RessourceTypeEnum.BOIS, 10),
-        new StockMission("Collecter 2 planches", RessourceTypeEnum.PLANCHE, 2)
+        new StockMission("Collecter 10 bois", RessourceTypeEnum.WOOD, 10),
+        new StockMission("Collecter 2 planches", RessourceTypeEnum.PLANK, 2)
     ]
 };
 

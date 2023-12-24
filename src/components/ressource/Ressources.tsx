@@ -58,7 +58,9 @@ const Ressources = () => {
             {
                 ressources?.map((ressource) => (
                     <tr key={ressource.type}>
-                        <td>{ressource.type}</td>
+                        <td>
+                            <img alt={ressource.type} src={process.env.PUBLIC_URL + ressource.getImageSrc()}
+                                 style={{width: "30px"}}/>&nbsp; {ressource.type}</td>
                         <td>{ressource.quantity}</td>
                         <td>
                             <button onClick={() => onClickAdd(ressource.type, 10)}

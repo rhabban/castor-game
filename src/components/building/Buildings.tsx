@@ -15,7 +15,7 @@ const Buildings = () => {
     console.log("Buildings render")
     return (
         <>
-            <h3>Mes batiments</h3>
+            <h3>Buildings</h3>
             <div className="row">
                 {
                     buildingList.map((build) => (

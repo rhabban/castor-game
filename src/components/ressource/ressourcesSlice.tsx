@@ -1,12 +1,13 @@
-import {RessourceType, RessourceTypeEnum} from "./Ressource";
+import {RessourcePrototype, RessourceTypeEnum} from "./model/RessourcePrototype";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {RessourceError} from "../../error/customErrors";
+import RessourceStore from "./model/RessourceStore";
 
 const initRessources = () => {
-    const ressources = new Array<RessourceType>();
-    ressources.push({type: RessourceTypeEnum.BOIS, quantity: 5})
-    ressources.push({type: RessourceTypeEnum.PLANCHE, quantity: 1})
-    return ressources;
+    return new Array<RessourcePrototype>(
+        RessourceStore.getInstance().getPrototype(RessourceTypeEnum.WOOD).cloneWithSpecificQuantity(5),
+        RessourceStore.getInstance().getPrototype(RessourceTypeEnum.PLANK).cloneWithSpecificQuantity(1),
+    )
 }
 
 const ressourcesSlice = createSlice({
@@ -14,35 +15,34 @@ const ressourcesSlice = createSlice({
     initialState: initRessources(),
     reducers: {
         incrementRessource: (state, action) => {
-            let newRessource = true;
+            let isNewRessource = true;
             state = state.map((ressource) => {
                 if (ressource.type === action.payload.ressourceType) {
-                    ressource = {...ressource, quantity: (ressource.quantity + action.payload.quantity)};
-                    newRessource = false;
+                    ressource = RessourceStore.getInstance().getPrototype(ressource.type).cloneWithSpecificQuantity(ressource.quantity + action.payload.quantity)
+                    isNewRessource = false;
                 }
                 return ressource;
             });
-            if (newRessource) {
-                state.push({type: action.payload.ressourceType, quantity: action.payload.quantity})
+            if (isNewRessource) {
+                state.push(RessourceStore.getInstance().getPrototype(action.payload.ressourceType).cloneWithSpecificQuantity(action.payload.quantity))
             }
-            console.log("clal")
             return state;
         },
         decrementRessource: (state, action) => {
-            let newRessource = true;
+            let isNewRessource = true;
             state = state.map((ressource) => {
                 if (ressource.type === action.payload.ressourceType) {
                     const newQty = ressource.quantity - action.payload.quantity;
 
                     if (newQty < 0)
                         throw new RessourceError("Not enough " + action.payload.ressourceType, action.payload.ressourceType);
-                    
-                    ressource = {...ressource, quantity: (ressource.quantity - action.payload.quantity)};
-                    newRessource = false;
+
+                    ressource = RessourceStore.getInstance().getPrototype(ressource.type).cloneWithSpecificQuantity(newQty)
+                    isNewRessource = false;
                 }
                 return ressource;
             });
-            if (newRessource) {
+            if (isNewRessource) {
                 throw new RessourceError("Ressource doesn't exist", action.payload.ressourceType);
             }
             return state
@@ -54,7 +54,7 @@ const ressourcesSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(incrementAsync.pending, () => {
             console.log("logAsync.pending")
-        }).addCase(incrementAsync.fulfilled, (state, action) => {
+        }).addCase(incrementAsync.fulfilled, () => {
             console.log("logAsync.fulfilled");
         });
     }

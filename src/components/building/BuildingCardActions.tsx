@@ -1,4 +1,3 @@
-import {BuildingEntity} from "./BuildingEntity";
 import React, {useContext} from "react";
 import {IWorker} from "../worker/Workers";
 import {useAppDispatch} from "../../store/storeHooks";
@@ -9,9 +8,10 @@ import buildingSlice, {addWorkerToBuilding, deleteBuilding, toggleActivate} from
 import GameContext from "../../context/GameContext";
 import {RessourceError} from "../../error/customErrors";
 import {fireRessourceError} from "../../helpers/helper";
+import {BuildingPrototype} from "./model/BuildingPrototype";
 
 const BuildingCardActions = ({building, availableWorkers}: {
-    building: BuildingEntity,
+    building: BuildingPrototype,
     availableWorkers: IWorker[]
 }) => {
 
@@ -36,7 +36,7 @@ const BuildingCardActions = ({building, availableWorkers}: {
     const onClickDelete = () => {
         (async () => {
             dispatch(deleteBuilding(building));
-        })().then((res) => {
+        })().then(() => {
             dispatch(addGameEvent(new GameEventEntity(building.name + " has been removed", "building", gameContext?.turn || 0)))
         }).catch((err: RessourceError) => {
             dispatch(addGameEvent(new GameEventEntity("Manque de " + err.ressourceType + " pour terminer le tour", "turn", gameContext?.turn || 0)))
@@ -68,8 +68,9 @@ const BuildingCardActions = ({building, availableWorkers}: {
                         <ul className="dropdown-menu" aria-labelledby="affectWorker">
                             {
                                 availableWorkers.map((worker) => (
-                                    <li key={worker.id}><a className="dropdown-item" href="#"
-                                                           onClick={() => onClickAddWorker(worker)}>{worker.name}</a>
+                                    <li key={worker.id}>
+                                        <button className="dropdown-item"
+                                                onClick={() => onClickAddWorker(worker)}>{worker.name}</button>
                                     </li>
                                 ))
                             }

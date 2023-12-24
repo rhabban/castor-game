@@ -2,6 +2,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import WorkerError from "../../error/WorkerError";
 import {BuildingPrototype, BuildingTypeEnum} from "./model/BuildingPrototype";
 import BuildingStore from "./model/BuildingStore";
+import {PrototypeError} from "../../error/customErrors";
 
 const initBuildings = () => {
     return new Array<BuildingPrototype>(
@@ -18,12 +19,12 @@ const buildingSlice = createSlice({
             const idxSelectedBuilding: number = buildingListState.findIndex(building => building?.id === action.payload.id);
 
             if (!idxSelectedBuilding === undefined || !buildingListState[idxSelectedBuilding] === undefined)
-                throw Error;
+                throw new PrototypeError("buildingListState or idx choosen undefined");
 
             let selectedBuilding = buildingListState[idxSelectedBuilding]?.clone();
 
             if (!selectedBuilding)
-                throw Error;
+                throw new PrototypeError("selectedBuilding doesn't exists");
             selectedBuilding.isEnabled = !selectedBuilding.isEnabled;
             buildingListState[idxSelectedBuilding] = selectedBuilding;
 
@@ -44,7 +45,7 @@ const buildingSlice = createSlice({
             })
         },
         addBuilding: (buildingListState, action: PayloadAction<BuildingTypeEnum>) => {
-            buildingListState.push(BuildingStore.getInstance().getPrototype(action.payload))
+            buildingListState.push(BuildingStore.getInstance().getPrototype(action.payload).clone())
         },
         deleteBuilding: (buildingListState, action) => {
             if (action.payload.workersId.length > 0)

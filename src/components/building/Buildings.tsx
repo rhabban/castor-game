@@ -1,6 +1,8 @@
 import {useAppDispatch, useAppSelector} from "../../store/storeHooks";
 import React, {useEffect} from "react";
 import BuildingCard from "./BuildingCard";
+import {addBuilding} from "./buildingSlice";
+import {BuildingTypeEnum} from "./model/BuildingPrototype";
 
 const Buildings = () => {
 
@@ -15,20 +17,22 @@ const Buildings = () => {
     console.log("Buildings render")
     return (
         <>
-            <h3>Buildings</h3>
-            <div className="row">
-                {
-                    buildingList.map((build) => (
-                        <BuildingCard key={build.id} building={build}/>
-                    ))
-                }
+            <div className={"row"}>
+                <h3>Buildings</h3>
+                <div className="row">
+                    {
+                        buildingList.map((build) => (
+                            <BuildingCard key={build.id} building={build}/>
+                        ))
+                    }
+                </div>
             </div>
-            <h3>Constuire un batiment</h3>
-            <button onClick={() => dispatch({
-                type: "building/addBuilding",
-                payload: true
-            })}> Nouvelle forêt
-            </button>
+            <hr/>
+            <div className={"row"}>
+                <h3>Constuire un batiment</h3>
+                <button onClick={() => dispatch(addBuilding(BuildingTypeEnum.LUMBER_CAMP))}> Nouveau Camp de bucheron
+                </button>
+            </div>
 
         </>
     )

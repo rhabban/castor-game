@@ -35,7 +35,9 @@ function App() {
             </>
             :
             <Provider store={store}>
-                <Game setEndGame={() => setIsGame(false)}/>
+                <div style={{marginBottom: "100px"}}>
+                    <Game setEndGame={() => setIsGame(false)}/>
+                </div>
             </Provider>
 
     );

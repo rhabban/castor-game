@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IWorker, Worker} from "./Workers";
+import {Worker} from "./Workers";
 
 const initWorkerList = () => {
     return [new Worker("Coco"), new Worker("Hugo")];
@@ -9,19 +9,18 @@ const workersSlice = createSlice({
     name: "workers",
     initialState: initWorkerList(),
     reducers: {
-        editWorker: (state, action) => {
-            const newWorkerList: IWorker[] = state.map((worker) => {
-                if (worker.name === action.payload.name) {
-                    worker = action.payload;
-                }
-                return worker;
-            });
-            return newWorkerList;
-        },
         resetWorkerList: () => {
             return initWorkerList()
         },
-        removeFromBuildingId: (state, action: PayloadAction<string>) => {
+        addBuildingToWorker: (state, action) => {
+            return state.map((worker) => {
+                if (worker.id === action.payload.workerId) {
+                    worker.buildingId = action.payload.buildingId;
+                }
+                return worker
+            });
+        },
+        removeAllFromBuildingId: (state, action: PayloadAction<string>) => {
             return state.map((worker) => {
                 if (worker.buildingId === action.payload) {
                     worker.buildingId = null;
@@ -32,9 +31,9 @@ const workersSlice = createSlice({
     }
 })
 export const {
-    editWorker,
+    addBuildingToWorker,
     resetWorkerList,
-    removeFromBuildingId
+    removeAllFromBuildingId
 } = workersSlice.actions;
 
 export default workersSlice;

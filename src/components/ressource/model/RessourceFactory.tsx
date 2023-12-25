@@ -1,8 +1,8 @@
 import {RessourcePrototype, RessourceTypeEnum} from "./RessourcePrototype";
 import {PrototypeError} from "../../../error/customErrors";
 
-export class RessourceStore {
-    private static instance: RessourceStore;
+export class RessourceFactory {
+    private static instance: RessourceFactory;
 
     private ressourcePrototypeMap: Map<RessourceTypeEnum, RessourcePrototype> = new Map<RessourceTypeEnum, RessourcePrototype>();
 
@@ -12,10 +12,10 @@ export class RessourceStore {
         this.ressourcePrototypeMap.set(RessourceTypeEnum.STONE, new RessourcePrototype(RessourceTypeEnum.STONE, 0));
     }
 
-    public static getInstance(): RessourceStore {
-        if (!RessourceStore.instance)
-            RessourceStore.instance = new RessourceStore();
-        return RessourceStore.instance;
+    public static getInstance(): RessourceFactory {
+        if (!RessourceFactory.instance)
+            RessourceFactory.instance = new RessourceFactory();
+        return RessourceFactory.instance;
     }
 
     public getPrototype(ressourceType: RessourceTypeEnum): RessourcePrototype {
@@ -25,4 +25,4 @@ export class RessourceStore {
     }
 }
 
-export default RessourceStore;
+export default RessourceFactory;

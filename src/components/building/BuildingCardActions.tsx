@@ -3,8 +3,8 @@ import {IWorker} from "../worker/Workers";
 import {useAppDispatch} from "../../store/storeHooks";
 import {addGameEvent} from "../gameEvent/gameEventSlice";
 import {GameEventEntity} from "../gameEvent/GameEventEntity";
-import workersSlice, {editWorker} from "../worker/workersSlice";
-import buildingSlice, {addWorkerToBuilding, deleteBuilding, toggleActivate} from "./buildingSlice";
+import {addBuildingToWorker, removeAllFromBuildingId} from "../worker/workersSlice";
+import {addWorkerToBuilding, deleteBuilding, removeAllWorkerFromBuilding, setIsEnabled} from "./buildingSlice";
 import GameContext from "../../context/GameContext";
 import {RessourceError} from "../../error/customErrors";
 import {fireRessourceError} from "../../helpers/helper";
@@ -19,17 +19,16 @@ const BuildingCardActions = ({building, availableWorkers}: {
     const gameContext = useContext(GameContext);
 
     const onClickAddWorker = (worker: IWorker) => {
-        worker.buildingId = building.id;
-        dispatch(editWorker(worker))
+        dispatch(addBuildingToWorker({workerId: worker.id, buildingId: building.id}))
         dispatch(addWorkerToBuilding({workerId: worker.id, buildingId: building.id}))
-        dispatch(toggleActivate(building))
+        dispatch(setIsEnabled({buildingId: building.id, value: true}))
         dispatch(addGameEvent(new GameEventEntity(worker.name + " est affecté à " + building.name, "worker", gameContext?.turn || 0)))
     }
 
     const onClickRemoveWorker = () => {
-        dispatch(workersSlice.actions.removeFromBuildingId(building.id))
-        dispatch(buildingSlice.actions.removeAllWorkerFromBuilding(building.id))
-        dispatch(toggleActivate(building))
+        dispatch(removeAllFromBuildingId(building.id))
+        dispatch(removeAllWorkerFromBuilding(building.id))
+        dispatch(setIsEnabled({buildingId: building.id, value: false}))
         dispatch(addGameEvent(new GameEventEntity(building.name + " has removed all its workers", "building", gameContext?.turn || 0)))
     }
 
@@ -39,9 +38,7 @@ const BuildingCardActions = ({building, availableWorkers}: {
         })().then(() => {
             dispatch(addGameEvent(new GameEventEntity(building.name + " has been removed", "building", gameContext?.turn || 0)))
         }).catch((err: RessourceError) => {
-            dispatch(addGameEvent(new GameEventEntity("Manque de " + err.ressourceType + " pour terminer le tour", "turn", gameContext?.turn || 0)))
             fireRessourceError(err.message)
-
         }).catch((err) => {
             throw err
         });

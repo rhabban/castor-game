@@ -1,12 +1,12 @@
 import {RessourcePrototype, RessourceTypeEnum} from "./model/RessourcePrototype";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {RessourceError} from "../../error/customErrors";
-import RessourceStore from "./model/RessourceStore";
+import RessourceFactory from "./model/RessourceFactory";
 
 const initRessources = () => {
     return new Array<RessourcePrototype>(
-        RessourceStore.getInstance().getPrototype(RessourceTypeEnum.WOOD).cloneWithSpecificQuantity(5),
-        RessourceStore.getInstance().getPrototype(RessourceTypeEnum.PLANK).cloneWithSpecificQuantity(1),
+        RessourceFactory.getInstance().getPrototype(RessourceTypeEnum.WOOD).cloneWithSpecificQuantity(5),
+        RessourceFactory.getInstance().getPrototype(RessourceTypeEnum.PLANK).cloneWithSpecificQuantity(1),
     )
 }
 
@@ -18,13 +18,13 @@ const ressourcesSlice = createSlice({
             let isNewRessource = true;
             state = state.map((ressource) => {
                 if (ressource.type === action.payload.ressourceType) {
-                    ressource = RessourceStore.getInstance().getPrototype(ressource.type).cloneWithSpecificQuantity(ressource.quantity + action.payload.quantity)
+                    ressource = RessourceFactory.getInstance().getPrototype(ressource.type).cloneWithSpecificQuantity(ressource.quantity + action.payload.quantity)
                     isNewRessource = false;
                 }
                 return ressource;
             });
             if (isNewRessource) {
-                state.push(RessourceStore.getInstance().getPrototype(action.payload.ressourceType).cloneWithSpecificQuantity(action.payload.quantity))
+                state.push(RessourceFactory.getInstance().getPrototype(action.payload.ressourceType).cloneWithSpecificQuantity(action.payload.quantity))
             }
             return state;
         },
@@ -37,7 +37,7 @@ const ressourcesSlice = createSlice({
                     if (newQty < 0)
                         throw new RessourceError("Not enough " + action.payload.ressourceType, action.payload.ressourceType);
 
-                    ressource = RessourceStore.getInstance().getPrototype(ressource.type).cloneWithSpecificQuantity(newQty)
+                    ressource = RessourceFactory.getInstance().getPrototype(ressource.type).cloneWithSpecificQuantity(newQty)
                     isNewRessource = false;
                 }
                 return ressource;

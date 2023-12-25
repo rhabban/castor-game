@@ -8,6 +8,7 @@ const Buildings = () => {
 
     const buildingList = useAppSelector((state) => state.building);
 
+    const buildingPlans = [BuildingTypeEnum.LUMBER_CAMP, BuildingTypeEnum.LUMBER_MILL]
     const dispatch = useAppDispatch();
 
     useEffect(() => {

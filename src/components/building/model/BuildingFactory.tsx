@@ -2,8 +2,8 @@ import {RessourceTypeEnum} from "../../ressource/model/RessourcePrototype";
 import {PrototypeError} from "../../../error/customErrors";
 import {BuildingPrototype, BuildingTypeEnum} from "./BuildingPrototype";
 
-export class BuildingStore {
-    private static instance: BuildingStore;
+export class BuildingFactory {
+    private static instance: BuildingFactory;
 
     private buildingPrototypeMap: Map<BuildingTypeEnum, BuildingPrototype> = new Map<BuildingTypeEnum, BuildingPrototype>();
 
@@ -16,10 +16,10 @@ export class BuildingStore {
             RessourceTypeEnum.STONE, 1, RessourceTypeEnum.STONE, 0));
     }
 
-    public static getInstance(): BuildingStore {
-        if (!BuildingStore.instance)
-            BuildingStore.instance = new BuildingStore();
-        return BuildingStore.instance;
+    public static getInstance(): BuildingFactory {
+        if (!BuildingFactory.instance)
+            BuildingFactory.instance = new BuildingFactory();
+        return BuildingFactory.instance;
     }
 
     public getPrototype(buildingType: BuildingTypeEnum): BuildingPrototype {
@@ -29,4 +29,4 @@ export class BuildingStore {
     }
 }
 
-export default BuildingStore;
+export default BuildingFactory;

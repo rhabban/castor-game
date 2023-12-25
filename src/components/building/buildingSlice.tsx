@@ -1,13 +1,12 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import WorkerError from "../../error/WorkerError";
 import {BuildingPrototype, BuildingTypeEnum} from "./model/BuildingPrototype";
-import BuildingStore from "./model/BuildingStore";
-import {PrototypeError} from "../../error/customErrors";
+import BuildingFactory from "./model/BuildingFactory";
 
 const initBuildings = () => {
     return new Array<BuildingPrototype>(
-        BuildingStore.getInstance().getPrototype(BuildingTypeEnum.LUMBER_CAMP).clone(),
-        BuildingStore.getInstance().getPrototype(BuildingTypeEnum.LUMBER_MILL).clone(),
+        BuildingFactory.getInstance().getPrototype(BuildingTypeEnum.LUMBER_CAMP).clone(),
+        BuildingFactory.getInstance().getPrototype(BuildingTypeEnum.LUMBER_MILL).clone(),
     )
 }
 
@@ -15,18 +14,14 @@ const buildingSlice = createSlice({
     name: "building",
     initialState: initBuildings(),
     reducers: {
-        toggleActivate: (buildingListState, action) => {
-            const idxSelectedBuilding: number = buildingListState.findIndex(building => building?.id === action.payload.id);
-
-            if (!idxSelectedBuilding === undefined || !buildingListState[idxSelectedBuilding] === undefined)
-                throw new PrototypeError("buildingListState or idx choosen undefined");
-
-            let selectedBuilding = buildingListState[idxSelectedBuilding]?.clone();
-
-            if (!selectedBuilding)
-                throw new PrototypeError("selectedBuilding doesn't exists");
-            selectedBuilding.isEnabled = !selectedBuilding.isEnabled;
-            buildingListState[idxSelectedBuilding] = selectedBuilding;
+        setIsEnabled: (buildingListState, action) => {
+            const {selectedBuildingId, value} = action.payload;
+            return buildingListState.map((building: BuildingPrototype) => {
+                    if (building.id === selectedBuildingId)
+                        building.isEnabled = value;
+                    return building
+                }
+            )
 
         },
         addWorkerToBuilding: (state, action) => {
@@ -45,7 +40,7 @@ const buildingSlice = createSlice({
             })
         },
         addBuilding: (buildingListState, action: PayloadAction<BuildingTypeEnum>) => {
-            buildingListState.push(BuildingStore.getInstance().getPrototype(action.payload).clone())
+            buildingListState.push(BuildingFactory.getInstance().getPrototype(action.payload).clone() as BuildingPrototype)
         },
         deleteBuilding: (buildingListState, action) => {
             if (action.payload.workersId.length > 0)
@@ -58,7 +53,7 @@ const buildingSlice = createSlice({
     }
 })
 export const {
-    toggleActivate,
+    setIsEnabled,
     addBuilding,
     deleteBuilding,
     addWorkerToBuilding,

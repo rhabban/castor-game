@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import './App.css';
 import Ressources from "./components/ressource/Ressources";
 import Buildings from "./components/building/Buildings";
-import {useAppDispatch} from "./store/storeHooks";
+import {useAppDispatch, useAppSelector} from "./store/storeHooks";
 import {FaForwardStep} from "react-icons/fa6";
 import {addGameEvent, resetGameEvent} from "./components/gameEvent/gameEventSlice";
 import {GameEventEntity} from "./components/gameEvent/GameEventEntity";
@@ -20,6 +20,8 @@ import {resetBuildingList} from "./components/building/buildingSlice";
 
 function Game({setEndGame}: { setEndGame: Function }) {
 
+    const workerList = useAppSelector((state) => state.workers);
+
     const dispatch = useAppDispatch();
 
     const initSequence = {
@@ -27,6 +29,10 @@ function Game({setEndGame}: { setEndGame: Function }) {
         isProcessing: false,
         isTerminated: false
     }
+
+    const availableWorkers = useMemo(() => {
+        return workerList.filter((worker) => (worker.buildingId === null))
+    }, [workerList]);
 
     const [sequence, setSequence] = useState(initSequence);
 
@@ -63,7 +69,7 @@ function Game({setEndGame}: { setEndGame: Function }) {
 
     return (
         <>
-            <GameContext.Provider value={{turn: turn, isProcessing: isProcessing}}>
+            <GameContext.Provider value={{turn: turn, isProcessing: isProcessing, availableWorkers: availableWorkers}}>
                 <div className="container">
                     <div className="row">
                         <div className="col-3">

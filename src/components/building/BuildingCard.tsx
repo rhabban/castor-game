@@ -1,18 +1,11 @@
 import {useAppSelector} from "../../store/storeHooks";
-import React, {useEffect, useState} from "react";
-import {IWorker} from "../worker/Workers";
+import React from "react";
 import BuildingCardActions from "./BuildingCardActions";
 import {BuildingPrototype} from "./model/BuildingPrototype";
 
 const BuildingCard = ({building}: { building: BuildingPrototype }) => {
 
     const workerList = useAppSelector((state) => state.workers);
-
-    const [availableWorkers, setAvailableWorkers] = useState<IWorker[]>([])
-
-    useEffect(() => {
-        setAvailableWorkers(workerList.filter((worker) => (worker.buildingId === null)))
-    }, [workerList]);
 
     const calculateWorkerName = (workerId: string) => {
         const selectedWorker = workerList.find((worker) => (worker.id === workerId));
@@ -44,7 +37,7 @@ const BuildingCard = ({building}: { building: BuildingPrototype }) => {
                             }</p>
                     </div>
 
-                    <BuildingCardActions building={building} availableWorkers={availableWorkers}/>
+                    <BuildingCardActions building={building}/>
                 </div>
             </div>
 

@@ -3,10 +3,12 @@
 //export const GameContext = createContext();
 
 import {createContext} from "react";
+import {IWorker} from "../components/worker/Workers";
 
 export interface IGameContext {
     turn: number;
     isProcessing: boolean;
+    availableWorkers: IWorker[];
 }
 
 const GameContext = createContext<IGameContext | undefined>(undefined);

@@ -23,6 +23,7 @@ export class BuildingPrototype extends ACommonPrototype {
 
     cost: RessourcePrototype;
 
+
     isEnabled: boolean;
 
     workersId: Array<string>;

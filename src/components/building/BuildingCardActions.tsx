@@ -10,9 +10,8 @@ import {RessourceError} from "../../error/customErrors";
 import {fireRessourceError} from "../../helpers/swalHelpers";
 import {BuildingPrototype} from "./model/BuildingPrototype";
 
-const BuildingCardActions = ({building, availableWorkers}: {
+const BuildingCardActions = ({building}: {
     building: BuildingPrototype,
-    availableWorkers: IWorker[]
 }) => {
 
     const dispatch = useAppDispatch()
@@ -64,7 +63,7 @@ const BuildingCardActions = ({building, availableWorkers}: {
                         </button>
                         <ul className="dropdown-menu" aria-labelledby="affectWorker">
                             {
-                                availableWorkers.map((worker) => (
+                                gameContext?.availableWorkers?.map((worker) => (
                                     <li key={worker.id}>
                                         <button className="dropdown-item"
                                                 onClick={() => onClickAddWorker(worker)}>{worker.name}</button>

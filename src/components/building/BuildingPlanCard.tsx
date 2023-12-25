@@ -9,7 +9,9 @@ import GameContext from "../../context/GameContext";
 import {decrementRessource} from "../ressource/ressourcesSlice";
 import {RessourceError} from "../../error/customErrors";
 import {fireRessourceError, fireValidNotification} from "../../helpers/swalHelpers";
-import {addBuilding, addWorkerToBuilding} from "./buildingSlice";
+import {addBuilding, addWorkerToBuilding, setIsEnabled} from "./buildingSlice";
+import {Worker} from "../worker/Workers";
+import {addBuildingToWorker} from "../worker/workersSlice";
 
 const BuildingPlanCard = ({buildingPlan}: { buildingPlan: BuildingPrototype }) => {
     const dispatch = useAppDispatch();
@@ -17,13 +19,13 @@ const BuildingPlanCard = ({buildingPlan}: { buildingPlan: BuildingPrototype }) =
     const gameContext = useContext(GameContext);
 
 
-    const onClickBuild = () => {
+    const onClickBuild = (worker: Worker) => {
         const buildingPrototype = BuildingFactory.getInstance().getPrototype(buildingPlan.type);
 
-        createBuilding(buildingPrototype.clone());
+        createBuilding(buildingPrototype.clone(), worker);
     }
 
-    const createBuilding = (buildingPrototype: BuildingPrototype) => {
+    const createBuilding = (buildingPrototype: BuildingPrototype, worker: Worker) => {
         (async () => {
             dispatch(decrementRessource({
                 ressourceType: buildingPrototype.cost.type,
@@ -31,9 +33,10 @@ const BuildingPlanCard = ({buildingPlan}: { buildingPlan: BuildingPrototype }) =
             }))
         })().then(() => {
             fireValidNotification(buildingPrototype.name + " has been successfuly built");
-            
-            dispatch(addWorkerToBuilding({workerId: worker.id, buildingId: building.id}))
             dispatch(addBuilding(buildingPrototype))
+            dispatch(setIsEnabled({buildingId: buildingPrototype.id, value: true}))
+            dispatch(addWorkerToBuilding({workerId: worker.id, buildingId: buildingPrototype.id}))
+            dispatch(addBuildingToWorker({workerId: worker.id, buildingId: buildingPrototype.id}))
             dispatch(addGameEvent(new GameEventEntity(buildingPrototype.name + " has been built", "building", gameContext?.turn || 0)))
         }).catch((e: RessourceError) => {
             dispatch(addGameEvent(
@@ -77,8 +80,24 @@ const BuildingPlanCard = ({buildingPlan}: { buildingPlan: BuildingPrototype }) =
                                     </small>
                                 </p>
                                 <div className={"col-5"}>
-                                    <button onClick={onClickBuild} className={"btn btn-primary"}> Build <FaHammer/>
-                                    </button>
+                                    <div className="dropdown">
+                                        <button
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                            data-bs-toggle="dropdown"
+                                            className={"btn btn-sm btn-primary dropdown-toggle"} id="affectWorker"
+                                        >Build <FaHammer/>
+                                        </button>
+                                        <ul className="dropdown-menu" aria-labelledby="affectWorker">
+                                            {
+                                                gameContext?.availableWorkers?.map((worker) => (
+                                                    <li key={worker.id}>
+                                                        <button className="dropdown-item"
+                                                                onClick={() => onClickBuild(worker)}>{worker.name}</button>
+                                                    </li>
+                                                ))
+                                            }
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>

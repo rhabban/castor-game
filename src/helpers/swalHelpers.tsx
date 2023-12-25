@@ -1,14 +1,6 @@
 import Swal from "sweetalert2";
 import {IMission} from "../components/mission/Missions";
 
-export const wait = (ms: number) => {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve(true);
-        }, ms);
-    });
-};
-
 export const fireEndTourEvent = (turn: number) => {
     Swal.fire({
         icon: 'success',
@@ -18,13 +10,18 @@ export const fireEndTourEvent = (turn: number) => {
     })
 }
 
-export const fireMissionSuccessful = (mission: IMission) => {
+export const fireValidNotification = (message: string) => {
     Swal.fire({
         icon: 'success',
-        text: "Mission terminée : " + mission.name,
+        text: message,
         toast: true,
         position: 'center'
     })
+}
+
+
+export const fireMissionSuccessful = (mission: IMission) => {
+    fireValidNotification("Mission terminée : " + mission.name);
 }
 
 export const fireRessourceError = (message: string) => {

@@ -7,7 +7,7 @@ import {addBuildingToWorker, removeAllFromBuildingId} from "../worker/workersSli
 import {addWorkerToBuilding, deleteBuilding, removeAllWorkerFromBuilding, setIsEnabled} from "./buildingSlice";
 import GameContext from "../../context/GameContext";
 import {RessourceError} from "../../error/customErrors";
-import {fireRessourceError} from "../../helpers/helper";
+import {fireRessourceError} from "../../helpers/swalHelpers";
 import {BuildingPrototype} from "./model/BuildingPrototype";
 
 const BuildingCardActions = ({building, availableWorkers}: {

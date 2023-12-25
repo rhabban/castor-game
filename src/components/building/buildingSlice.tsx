@@ -6,7 +6,6 @@ import BuildingFactory from "./model/BuildingFactory";
 const initBuildings = () => {
     return new Array<BuildingPrototype>(
         BuildingFactory.getInstance().getPrototype(BuildingTypeEnum.LUMBER_CAMP).clone(),
-        BuildingFactory.getInstance().getPrototype(BuildingTypeEnum.LUMBER_MILL).clone(),
     )
 }
 
@@ -15,9 +14,9 @@ const buildingSlice = createSlice({
     initialState: initBuildings(),
     reducers: {
         setIsEnabled: (buildingListState, action) => {
-            const {selectedBuildingId, value} = action.payload;
+            const {buildingId, value} = action.payload;
             return buildingListState.map((building: BuildingPrototype) => {
-                    if (building.id === selectedBuildingId)
+                    if (building.id === buildingId)
                         building.isEnabled = value;
                     return building
                 }
@@ -39,8 +38,8 @@ const buildingSlice = createSlice({
                 return building;
             })
         },
-        addBuilding: (buildingListState, action: PayloadAction<BuildingTypeEnum>) => {
-            buildingListState.push(BuildingFactory.getInstance().getPrototype(action.payload).clone() as BuildingPrototype)
+        addBuilding: (buildingListState, action: PayloadAction<BuildingPrototype>) => {
+            buildingListState.push(action.payload)
         },
         deleteBuilding: (buildingListState, action) => {
             if (action.payload.workersId.length > 0)

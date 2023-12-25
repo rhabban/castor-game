@@ -5,14 +5,14 @@ import {
     fireRessourceError,
     fireTurnIsProcessing,
     fireVictory,
-    wait
-} from "../helpers/helper";
+} from "../helpers/swalHelpers";
 import {useAppDispatch, useAppSelector} from "../store/storeHooks";
 import {addGameEvent} from "../components/gameEvent/gameEventSlice";
 import {GameEventEntity} from "../components/gameEvent/GameEventEntity";
 import {completeMission} from "../components/mission/MissionsSlice";
 import {decrementRessource, incrementRessource} from "../components/ressource/ressourcesSlice";
 import {RessourceError} from "../error/customErrors";
+import {wait} from "../helpers/commonHelpers";
 
 
 export interface sequence {

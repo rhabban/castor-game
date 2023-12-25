@@ -1,5 +1,10 @@
 import cloneDeep from "lodash.clonedeep";
 
+export interface RessourceWithQuantity {
+    type: RessourceTypeEnum,
+    quantity: number
+}
+
 export enum RessourceTypeEnum {
     WOOD = "Wood",
     PLANK = "Plank",

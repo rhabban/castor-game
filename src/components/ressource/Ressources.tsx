@@ -4,7 +4,7 @@ import {addGameEvent} from "../gameEvent/gameEventSlice";
 import {GameEventEntity} from "../gameEvent/GameEventEntity";
 import {useContext} from "react";
 import GameContext from "../../context/GameContext";
-import {fireRessourceError} from "../../helpers/helper";
+import {fireRessourceError} from "../../helpers/swalHelpers";
 import {RessourceError} from "../../error/customErrors";
 
 const Ressources = () => {

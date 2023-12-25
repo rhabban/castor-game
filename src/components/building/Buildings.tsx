@@ -1,15 +1,17 @@
-import {useAppDispatch, useAppSelector} from "../../store/storeHooks";
+import {useAppSelector} from "../../store/storeHooks";
 import React, {useEffect} from "react";
 import BuildingCard from "./BuildingCard";
-import {addBuilding} from "./buildingSlice";
 import {BuildingTypeEnum} from "./model/BuildingPrototype";
+import BuildingPlan from "./BuildingPlanCard";
+import BuildingFactory from "./model/BuildingFactory";
 
 const Buildings = () => {
 
     const buildingList = useAppSelector((state) => state.building);
 
-    const buildingPlans = [BuildingTypeEnum.LUMBER_CAMP, BuildingTypeEnum.LUMBER_MILL]
-    const dispatch = useAppDispatch();
+    const buildingPrototypePlans =
+        [BuildingFactory.getInstance().getPrototype(BuildingTypeEnum.LUMBER_CAMP),
+            BuildingFactory.getInstance().getPrototype(BuildingTypeEnum.LUMBER_MILL)];
 
     useEffect(() => {
         console.log("buildingList updated", buildingList)
@@ -31,8 +33,11 @@ const Buildings = () => {
             <hr/>
             <div className={"row"}>
                 <h3>Constuire un batiment</h3>
-                <button onClick={() => dispatch(addBuilding(BuildingTypeEnum.LUMBER_CAMP))}> Nouveau Camp de bucheron
-                </button>
+                {
+                    buildingPrototypePlans.map((buildingPlan) => (
+                        <BuildingPlan key={buildingPlan.name} buildingPlan={buildingPlan}/>
+                    ))
+                }
             </div>
 
         </>

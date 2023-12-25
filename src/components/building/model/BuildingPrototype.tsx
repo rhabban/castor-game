@@ -1,4 +1,4 @@
-import {RessourceTypeEnum} from "../../ressource/model/RessourcePrototype";
+import {RessourcePrototype, RessourceTypeEnum} from "../../ressource/model/RessourcePrototype";
 import {ACommonPrototype} from "../../common/model/commonPrototype";
 
 export enum BuildingTypeEnum {
@@ -21,11 +21,13 @@ export class BuildingPrototype extends ACommonPrototype {
     ressourceTypeIn: RessourceTypeEnum;
     quantityIn: number;
 
+    cost: RessourcePrototype;
+
     isEnabled: boolean;
 
     workersId: Array<string>;
 
-    constructor(name: string, type: BuildingTypeEnum, ressourceTypeOut: RessourceTypeEnum, quantityOut: number, ressourceTypeIn: RessourceTypeEnum, quantityIn: number) {
+    constructor(name: string, type: BuildingTypeEnum, ressourceTypeOut: RessourceTypeEnum, quantityOut: number, ressourceTypeIn: RessourceTypeEnum, quantityIn: number, cost: RessourcePrototype) {
         super(name);
 
         this.type = type;
@@ -35,6 +37,7 @@ export class BuildingPrototype extends ACommonPrototype {
         this.quantityIn = quantityIn;
         this.isEnabled = false;
         this.workersId = [];
+        this.cost = cost;
     }
 
     public getImageSrc() {

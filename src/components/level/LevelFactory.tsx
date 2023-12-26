@@ -1,6 +1,6 @@
 import LevelPrototype from "./LevelPrototype";
 import {BuildingTypeEnum} from "../building/model/BuildingPrototype";
-import {PrototypeError} from "../../error/customErrors";
+import {LevelError, PrototypeError} from "../../error/customErrors";
 import {StockMission} from "../mission/Missions";
 import {RessourceTypeEnum} from "../ressource/model/RessourcePrototype";
 
@@ -16,7 +16,10 @@ export class LevelFactory {
             []));
         this.levelPrototypeMap.set(1, new LevelPrototype(1, "Fine, you know now how to collect" +
             " a ressource from a building.\n For your next mission, you have to produce some plank from a new building",
-            [new StockMission("Collect 2 plank", RessourceTypeEnum.PLANK, 2)], [BuildingTypeEnum.LUMBER_MILL]));
+            [new StockMission("Collect 2 planks", RessourceTypeEnum.PLANK, 2)], [BuildingTypeEnum.LUMBER_MILL]));
+        this.levelPrototypeMap.set(2, new LevelPrototype(1, "Ok you got planks now \n" +
+            "You can now build a Quarry to extract some stone and then build something more consistant",
+            [new StockMission("Collect 5 stones", RessourceTypeEnum.STONE, 5)], [BuildingTypeEnum.LUMBER_MILL, BuildingTypeEnum.STONE_QUARRY]));
     }
 
     public static getInstance(): LevelFactory {
@@ -30,7 +33,7 @@ export class LevelFactory {
             throw new PrototypeError("Level Number is not known when calling getLevel from levelFactory")
         if (this.levelPrototypeMap.has(number))
             return this.levelPrototypeMap.get(number) as LevelPrototype;
-        else throw new PrototypeError("Level " + number + " isn't defined");
+        else throw new LevelError("Level " + number + " isn't defined");
     }
 
     /*public getPrototype(ressourceType: RessourceTypeEnum): RessourcePrototype {

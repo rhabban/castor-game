@@ -4,7 +4,6 @@ import {
     fireMissionSuccessful,
     fireRessourceError,
     fireTurnIsProcessing,
-    fireVictory,
 } from "../helpers/swalHelpers";
 import {useAppDispatch, useAppSelector} from "../store/storeHooks";
 import {addGameEvent} from "../components/gameEvent/gameEventSlice";
@@ -53,7 +52,7 @@ export default function useHandleTurn(sequence: ISequence) {
             )
             if (activeMission.length === 0) {
                 setIsProcessing(false);
-                fireVictory(() => setIsTerminated(true));
+                //fireVictory(() => setIsTerminated(true));
                 setLevel(level + 1);
             }
         }

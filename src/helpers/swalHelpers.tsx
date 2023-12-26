@@ -58,7 +58,16 @@ export const fireVictory = (callback: () => void) => {
             callback();
         }
     });
+}
 
+export const fireNewlevel = (message: string) => {
+    Swal.fire({
+        title: "New level",
+        width: 600,
+        padding: "3em",
+        confirmButtonText: "Go !",
+        text: message
+    })
 }
 
 export const fireTurnIsProcessing = () => {

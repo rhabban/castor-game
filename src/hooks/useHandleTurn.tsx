@@ -15,16 +15,19 @@ import {RessourceError} from "../error/customErrors";
 import {wait} from "../helpers/commonHelpers";
 
 
-export interface sequence {
+export interface ISequence {
     turn: number,
     isProcessing: boolean,
+    isTerminated: boolean,
+    level: number
 }
 
-export default function useHandleTurn(sequence: sequence) {
+export default function useHandleTurn(sequence: ISequence) {
 
     const [turn, setTurn] = useState(sequence.turn)
     const [isProcessing, setIsProcessing] = useState(sequence.isProcessing)
-    const [isTerminated, setIsTerminated] = useState(false)
+    const [isTerminated, setIsTerminated] = useState(sequence.isTerminated)
+    const [level, setLevel] = useState(sequence.level)
 
     const buildingList = useAppSelector((state) => state.building);
     const ressources = useAppSelector((state) => state.ressources);
@@ -51,6 +54,7 @@ export default function useHandleTurn(sequence: sequence) {
             if (activeMission.length === 0) {
                 setIsProcessing(false);
                 fireVictory(() => setIsTerminated(true));
+                setLevel(level + 1);
             }
         }
 
@@ -113,7 +117,8 @@ export default function useHandleTurn(sequence: sequence) {
     return {
         turn,
         isProcessing,
-        isTerminated
+        isTerminated,
+        level
     };
 
 }

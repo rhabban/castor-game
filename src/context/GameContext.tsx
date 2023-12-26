@@ -9,6 +9,7 @@ export interface IGameContext {
     turn: number;
     isProcessing: boolean;
     availableWorkers: IWorker[];
+    level: number;
 }
 
 const GameContext = createContext<IGameContext | undefined>(undefined);

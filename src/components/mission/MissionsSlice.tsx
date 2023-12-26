@@ -1,5 +1,5 @@
-import {createSlice} from "@reduxjs/toolkit";
-import {StockMission} from "./Missions";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {IMission, StockMission} from "./Missions";
 import {RessourceTypeEnum} from "../ressource/model/RessourcePrototype";
 
 const initMissionList = () => {
@@ -12,10 +12,10 @@ const initMissionList = () => {
 
 const missionsSlice = createSlice({
     name: "missions",
-    initialState: initMissionList(),
+    initialState: new Array<IMission>(),
     reducers: {
-        completeMission: (missionList, action) => {
-            const newMissionList: StockMission[] = missionList.map((mission) => {
+        completeMission: (missionState, action) => {
+            const newMissionList = missionState.map((mission) => {
                 if (mission.id === action.payload) {
                     return {...mission, isCompleted: true}
                 }
@@ -24,12 +24,17 @@ const missionsSlice = createSlice({
             return newMissionList
         },
 
+        setMissions: (missionState, action: PayloadAction<IMission[]>) => {
+            missionState = action.payload;
+            return missionState;
+        },
+
         resetMissionList: () => {
-            return initMissionList();
+            return [];
         }
 
     }
 })
-export const {completeMission, resetMissionList} = missionsSlice.actions;
+export const {completeMission, resetMissionList, setMissions} = missionsSlice.actions;
 
 export default missionsSlice;

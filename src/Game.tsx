@@ -6,41 +6,42 @@ import {useAppDispatch, useAppSelector} from "./store/storeHooks";
 import {FaForwardStep} from "react-icons/fa6";
 import {addGameEvent, resetGameEvent} from "./components/gameEvent/gameEventSlice";
 import {GameEventEntity} from "./components/gameEvent/GameEventEntity";
-import GameEventLogger from "./components/GameEventLogger";
+import GameEventLogger from "./components/gameEvent/GameEventLogger";
 
 import GameContext from "./context/GameContext";
-import useHandleTurn from "./hooks/useHandleTurn";
+import useHandleTurn, {ISequence} from "./hooks/useHandleTurn";
 import Workers from "./components/worker/Workers";
 import Missions from "./components/mission/Missions";
-import {resetMissionList} from "./components/mission/MissionsSlice";
+import {resetMissionList, setMissions} from "./components/mission/MissionsSlice";
 import {resetRessource} from "./components/ressource/ressourcesSlice";
 import {resetWorkerList} from "./components/worker/workersSlice";
 import {FaDoorOpen} from "react-icons/fa";
 import {resetBuildingList} from "./components/building/buildingSlice";
+import {fireNewlevel} from "./helpers/swalHelpers";
+import LevelFactory from "./components/level/LevelFactory";
+
+const initSequence: ISequence = {
+    turn: 0,
+    isProcessing: false,
+    isTerminated: false,
+    level: 0,
+}
 
 function Game({setEndGame}: { setEndGame: Function }) {
 
     const workerList = useAppSelector((state) => state.workers);
-
     const dispatch = useAppDispatch();
-
-    const initSequence = {
-        turn: 0,
-        isProcessing: false,
-        isTerminated: false
-    }
 
     const availableWorkers = useMemo(() => {
         return workerList.filter((worker) => (worker.buildingId === null))
     }, [workerList]);
 
-    const [sequence, setSequence] = useState(initSequence);
+    const [sequence, setSequence] = useState<ISequence>(initSequence);
 
     const {
-        turn,
-        isProcessing,
-        isTerminated
+        turn, isProcessing, isTerminated, level
     } = useHandleTurn(sequence);
+
 
     useEffect(() => {
         dispatch(resetRessource());
@@ -52,11 +53,16 @@ function Game({setEndGame}: { setEndGame: Function }) {
     }, []);
 
     useEffect(() => {
-        if (isTerminated === true) {
+        if (isTerminated) {
             console.log('le jeu est terminé')
             setEndGame();
         }
     }, [isTerminated]);
+
+    useEffect(() => {
+        fireNewlevel(LevelFactory.getInstance().getLevel(level).description)
+        dispatch(setMissions(LevelFactory.getInstance().getLevel(level).missions))
+    }, [level]);
 
     const onClickPlayTurn = () => {
         dispatch(addGameEvent(new GameEventEntity("Fin du tour demandé", "turn", turn)))
@@ -69,7 +75,8 @@ function Game({setEndGame}: { setEndGame: Function }) {
 
     return (
         <>
-            <GameContext.Provider value={{turn: turn, isProcessing: isProcessing, availableWorkers: availableWorkers}}>
+            <GameContext.Provider
+                value={{turn: turn, isProcessing: isProcessing, availableWorkers: availableWorkers, level: level}}>
                 <div className="container">
                     <div className="row">
                         <div className="col-3">

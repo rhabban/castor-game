@@ -1,4 +1,4 @@
-import {useAppSelector} from "../store/storeHooks";
+import {useAppSelector} from "../../store/storeHooks";
 import React from "react";
 
 export const GameEventLogger = () => {
@@ -6,11 +6,8 @@ export const GameEventLogger = () => {
     const gameEvents = useAppSelector((state) => state.gameEvents);
 
     if (gameEvents && gameEvents.length > 0) {
-        console.log("gameEvents", gameEvents);
         const reversedList = [...gameEvents]
-
-        console.log("gameEvents REV", reversedList);
-
+        
         return (
             <>
                 <h3>Logger</h3>

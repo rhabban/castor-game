@@ -1,17 +1,34 @@
 import {useAppSelector} from "../../store/storeHooks";
-import React, {useEffect} from "react";
+import React, {useContext, useEffect, useMemo} from "react";
 import BuildingCard from "./BuildingCard";
-import {BuildingTypeEnum} from "./model/BuildingPrototype";
 import BuildingPlan from "./BuildingPlanCard";
 import BuildingFactory from "./model/BuildingFactory";
+import GameContext from "../../context/GameContext";
+import LevelFactory from "../level/LevelFactory";
 
 const Buildings = () => {
 
     const buildingList = useAppSelector((state) => state.building);
 
-    const buildingPrototypePlans =
-        [BuildingFactory.getInstance().getPrototype(BuildingTypeEnum.LUMBER_CAMP),
-            BuildingFactory.getInstance().getPrototype(BuildingTypeEnum.LUMBER_MILL)];
+    const gameContext = useContext(GameContext);
+
+    const availableBuilding = useMemo(
+        () => LevelFactory.getInstance().getLevel(gameContext?.level).availableBuildings, [gameContext?.level]);
+
+
+    const buildingPrototypePlans = useMemo(() => {
+        return availableBuilding.map((buildingType) => {
+            return BuildingFactory.getInstance().getPrototype(buildingType)
+        })
+    }, [availableBuilding]);
+
+    /*const buildingPrototypePlans = availableBuilding.map((buildingType) => {
+        return BuildingFactory.getInstance().getPrototype(buildingType)
+    })*/
+
+    useEffect(() => {
+        console.log("availableBuilding changed")
+    }, [gameContext?.level]);
 
     useEffect(() => {
         console.log("buildingList updated", buildingList)

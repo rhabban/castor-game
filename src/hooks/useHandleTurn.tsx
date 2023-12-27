@@ -4,6 +4,7 @@ import {
     fireMissionSuccessful,
     fireRessourceError,
     fireTurnIsProcessing,
+    fireVictory,
 } from "../helpers/swalHelpers";
 import {useAppDispatch, useAppSelector} from "../store/storeHooks";
 import {addGameEvent} from "../components/gameEvent/gameEventSlice";
@@ -12,6 +13,8 @@ import {completeMission} from "../components/mission/MissionsSlice";
 import {decrementRessource, incrementRessource} from "../components/ressource/ressourcesSlice";
 import {RessourceError} from "../error/customErrors";
 import {wait} from "../helpers/commonHelpers";
+import LevelConfig from "../components/level/LevelConfig";
+import {ActiveBuildingMission, StockMission} from "../components/mission/Missions";
 
 
 export interface ISequence {
@@ -52,8 +55,10 @@ export default function useHandleTurn(sequence: ISequence) {
             )
             if (activeMission.length === 0) {
                 setIsProcessing(false);
-                //fireVictory(() => setIsTerminated(true));
-                setLevel(level + 1);
+                if (LevelConfig.getInstance().getMaxlevel() === level)
+                    fireVictory(() => setIsTerminated(true));
+                else
+                    setLevel(level + 1);
             }
         }
 
@@ -105,10 +110,17 @@ export default function useHandleTurn(sequence: ISequence) {
 
     const validateMission = () => {
         missions.forEach(mission => {
-            if (!mission.isCompleted && mission.validate(ressources)) {
-                dispatch(completeMission(mission.id))
-                dispatch(addGameEvent(new GameEventEntity("Mission " + mission.name + " terminée", "mission", turn)))
-                fireMissionSuccessful(mission)
+            if (!mission.isCompleted) {
+                let validate = false;
+                if (mission instanceof StockMission)
+                    validate = mission.validate(ressources) || false
+                if (mission instanceof ActiveBuildingMission)
+                    validate = mission.validate(buildingList) || false
+                if (validate) {
+                    dispatch(completeMission(mission.id))
+                    dispatch(addGameEvent(new GameEventEntity("Mission " + mission.name + " terminée", "mission", turn)))
+                    fireMissionSuccessful(mission)
+                }
             }
         })
     }

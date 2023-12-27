@@ -1,6 +1,7 @@
 import {v4 as uuidv4} from "uuid";
 import {RessourcePrototype, RessourceTypeEnum} from "../ressource/model/RessourcePrototype";
 import {useAppSelector} from "../../store/storeHooks";
+import {BuildingPrototype, BuildingTypeEnum} from "../building/model/BuildingPrototype";
 
 
 export interface IMission {
@@ -42,6 +43,23 @@ export class StockMission extends Mission {
         const expectedRessource = payload.find(ressource => ressource.type === this.targetRessource)
         return expectedRessource
             && expectedRessource.quantity >= this.targetStock;
+
+    }
+}
+
+export class ActiveBuildingMission extends Mission {
+
+    buildingType: BuildingTypeEnum;
+
+    constructor(name: string, buildingType: BuildingTypeEnum) {
+        super(name);
+        this.buildingType = buildingType
+    }
+
+    validate = (payload: BuildingPrototype[]) => {
+        const expectedBuilding = payload.find(building => building.type === this.buildingType)
+        return expectedBuilding
+            && expectedBuilding.isEnabled;
 
     }
 }

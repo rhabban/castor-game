@@ -14,7 +14,7 @@ const BuildingCard = ({building}: { building: BuildingPrototype }) => {
 
     return (
         <>
-            <div className="card col-3" style={{"padding": "0"}}>
+            <div className={"card col-3 " + building.className} style={{"padding": "0"}}>
                 <img
                     src={process.env.PUBLIC_URL + building.getImageSrc()}
                     className={"card-img-top"} alt="..."/>

@@ -1,5 +1,5 @@
 import {RessourcePrototype, RessourceTypeEnum} from "./model/RessourcePrototype";
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RessourceError} from "../../error/customErrors";
 import RessourceFactory from "./model/RessourceFactory";
 
@@ -28,7 +28,7 @@ const ressourcesSlice = createSlice({
             }
             return state;
         },
-        decrementRessource: (state, action) => {
+        decrementRessource: (state, action: PayloadAction<{ ressourceType: RessourceTypeEnum, quantity: number }>) => {
             let isNewRessource = true;
             state = state.map((ressource) => {
                 if (ressource.type === action.payload.ressourceType) {
@@ -42,7 +42,7 @@ const ressourcesSlice = createSlice({
                 }
                 return ressource;
             });
-            if (isNewRessource) {
+            if (isNewRessource && action.payload.quantity > 0) {
                 throw new RessourceError("Ressource doesn't exist", action.payload.ressourceType);
             }
             return state

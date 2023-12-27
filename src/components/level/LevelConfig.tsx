@@ -1,7 +1,7 @@
 import LevelPrototype from "./LevelPrototype";
 import {BuildingTypeEnum} from "../building/model/BuildingPrototype";
 import {LevelError, PrototypeError} from "../../error/customErrors";
-import {StockMission} from "../mission/Missions";
+import {ActiveBuildingMission, StockMission} from "../mission/Missions";
 import {RessourceTypeEnum} from "../ressource/model/RessourcePrototype";
 
 export class LevelConfig {
@@ -11,25 +11,34 @@ export class LevelConfig {
 
     public constructor() {
         this.levelPrototypeMap.set(0, new LevelPrototype(0, "Welcome to castor game !\n" +
-            " Your first mission is to collect some wood with your first camp",
-            [new StockMission("Collect 10 wood", RessourceTypeEnum.WOOD, 10)],
+            " Your first mission is to affect a worker to your Lumber camp, you could then extract some wood",
+            [new ActiveBuildingMission("Affect a worker to your Lumber Camp", BuildingTypeEnum.LUMBER_CAMP)],
             [],
-            "ressources"));
-        this.levelPrototypeMap.set(1, new LevelPrototype(1, "Fine, you know now how to collect" +
+            ".lumberCamp"));
+        this.levelPrototypeMap.set(1, new LevelPrototype(0, "Good job !\n" +
+            " Now you can cut some wood with this affected worker",
+            [new StockMission("Collect 15 wood", RessourceTypeEnum.WOOD, 15)],
+            [],
+            ".ressources"));
+        this.levelPrototypeMap.set(2, new LevelPrototype(1, "Fine, you know now how to collect" +
             " a ressource from a building.\n For your next mission, you have to produce some plank from a new building",
             [new StockMission("Collect 2 planks", RessourceTypeEnum.PLANK, 2)],
             [BuildingTypeEnum.LUMBER_MILL],
-            "lumberMillPlan"));
-        this.levelPrototypeMap.set(2, new LevelPrototype(1, "Ok you got planks now \n" +
+            ".lumberMillPlan"));
+        this.levelPrototypeMap.set(3, new LevelPrototype(1, "Ok you got planks now \n" +
             "You can now build a Quarry to extract some stone and then build something more consistant",
-            [new StockMission("Collect 5 stones", RessourceTypeEnum.STONE, 5)], [BuildingTypeEnum.LUMBER_MILL, BuildingTypeEnum.STONE_QUARRY],
-            "stoneQuarryPlan"));
+            [new StockMission("Collect 2 stones", RessourceTypeEnum.STONE, 2)], [BuildingTypeEnum.LUMBER_MILL, BuildingTypeEnum.STONE_QUARRY],
+            ".stoneQuarryPlan"));
     }
 
     public static getInstance(): LevelConfig {
         if (!LevelConfig.instance)
             LevelConfig.instance = new LevelConfig();
         return LevelConfig.instance;
+    }
+
+    public getMaxlevel(): number {
+        return this.levelPrototypeMap.size - 1;
     }
 
     public getLevel(number: number | undefined): LevelPrototype {

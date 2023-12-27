@@ -30,10 +30,6 @@ const Buildings = () => {
         console.log("availableBuilding changed")
     }, [gameContext?.level]);
 
-    useEffect(() => {
-        console.log("buildingList updated", buildingList)
-    }, [buildingList]);
-
     console.log("Buildings render")
     return (
         <>

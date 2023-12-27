@@ -70,7 +70,7 @@ function Game({setEndGame}: { setEndGame: Function }) {
             element.classList.remove("highlightedBox")
         })
 
-        const elementToHighlight = document.querySelectorAll("." + newLevel.highlightedClass);
+        const elementToHighlight = document.querySelectorAll(newLevel.selectorElementToHighlight || "");
         if (elementToHighlight && elementToHighlight[0]) {
             elementToHighlight[0].classList.add("highlightedBox")
         }

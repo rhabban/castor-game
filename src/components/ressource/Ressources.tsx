@@ -6,6 +6,7 @@ import {useContext} from "react";
 import GameContext from "../../context/GameContext";
 import {fireRessourceError} from "../../helpers/swalHelpers";
 import {RessourceError} from "../../error/customErrors";
+import {RessourceTypeEnum} from "./model/RessourcePrototype";
 
 const Ressources = () => {
 
@@ -30,7 +31,7 @@ const Ressources = () => {
             })
     }
 
-    const onClickRemove = (ressource: string, value: number) => {
+    const onClickRemove = (ressource: RessourceTypeEnum, value: number) => {
         (async () => {
             dispatch(decrementRessource({ressourceType: ressource, quantity: value}))
         })().then(() => dispatch(addGameEvent(new GameEventEntity("Retrait " + value + " " + ressource, "ressources", gameContext?.turn || 0))))

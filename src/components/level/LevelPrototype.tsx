@@ -7,13 +7,16 @@ class LevelPrototype {
     number: number;
     description: string;
     missions: IMission[];
-    availableBuildings: BuildingTypeEnum[]
+    availableBuildings: BuildingTypeEnum[];
 
-    constructor(number: number, description: string, missions: IMission[], availableBuildings: BuildingTypeEnum[]) {
+    highlightedClass: string | null;
+
+    constructor(number: number, description: string, missions: IMission[], availableBuildings: BuildingTypeEnum[], highlightedClass: string | null) {
         this.number = number;
         this.description = description;
         this.missions = missions;
         this.availableBuildings = availableBuildings;
+        this.highlightedClass = highlightedClass;
     }
 
     static copy(level: LevelPrototype) {

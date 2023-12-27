@@ -49,7 +49,7 @@ const BuildingPlanCard = ({buildingPlan}: { buildingPlan: BuildingPrototype }) =
 
     return (
         <>
-            <div className="card mb-1 planCard col-11">
+            <div className={"card mb-1 planCard col-11 " + buildingPlan.className + "Plan"}>
                 <div className="row">
                     <div className="col-3 g-0">
                         <img

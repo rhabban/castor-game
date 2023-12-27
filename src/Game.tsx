@@ -18,7 +18,8 @@ import {resetWorkerList} from "./components/worker/workersSlice";
 import {FaDoorOpen} from "react-icons/fa";
 import {resetBuildingList} from "./components/building/buildingSlice";
 import {fireNewlevel} from "./helpers/swalHelpers";
-import LevelFactory from "./components/level/LevelFactory";
+import LevelConfig from "./components/level/LevelConfig";
+import LevelPrototype from "./components/level/LevelPrototype";
 
 const initSequence: ISequence = {
     turn: 0,
@@ -60,8 +61,19 @@ function Game({setEndGame}: { setEndGame: Function }) {
     }, [isTerminated]);
 
     useEffect(() => {
-        fireNewlevel(LevelFactory.getInstance().getLevel(level).description)
-        dispatch(setMissions(LevelFactory.getInstance().getLevel(level).missions))
+        const newLevel: LevelPrototype = LevelConfig.getInstance().getLevel(level)
+        fireNewlevel(newLevel.description)
+        dispatch(setMissions(newLevel.missions))
+
+        const prevElementToHighLight = document.querySelectorAll(".highlightedBox")
+        prevElementToHighLight.forEach(element => {
+            element.classList.remove("highlightedBox")
+        })
+
+        const elementToHighlight = document.querySelectorAll("." + newLevel.highlightedClass);
+        if (elementToHighlight && elementToHighlight[0]) {
+            elementToHighlight[0].classList.add("highlightedBox")
+        }
     }, [level]);
 
     const onClickPlayTurn = () => {

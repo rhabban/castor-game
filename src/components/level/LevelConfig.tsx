@@ -4,8 +4,8 @@ import {LevelError, PrototypeError} from "../../error/customErrors";
 import {StockMission} from "../mission/Missions";
 import {RessourceTypeEnum} from "../ressource/model/RessourcePrototype";
 
-export class LevelFactory {
-    private static instance: LevelFactory;
+export class LevelConfig {
+    private static instance: LevelConfig;
 
     private levelPrototypeMap: Map<number, LevelPrototype> = new Map<number, LevelPrototype>();
 
@@ -13,19 +13,23 @@ export class LevelFactory {
         this.levelPrototypeMap.set(0, new LevelPrototype(0, "Welcome to castor game !\n" +
             " Your first mission is to collect some wood with your first camp",
             [new StockMission("Collect 10 wood", RessourceTypeEnum.WOOD, 10)],
-            []));
+            [],
+            "ressources"));
         this.levelPrototypeMap.set(1, new LevelPrototype(1, "Fine, you know now how to collect" +
             " a ressource from a building.\n For your next mission, you have to produce some plank from a new building",
-            [new StockMission("Collect 2 planks", RessourceTypeEnum.PLANK, 2)], [BuildingTypeEnum.LUMBER_MILL]));
+            [new StockMission("Collect 2 planks", RessourceTypeEnum.PLANK, 2)],
+            [BuildingTypeEnum.LUMBER_MILL],
+            "lumberMillPlan"));
         this.levelPrototypeMap.set(2, new LevelPrototype(1, "Ok you got planks now \n" +
             "You can now build a Quarry to extract some stone and then build something more consistant",
-            [new StockMission("Collect 5 stones", RessourceTypeEnum.STONE, 5)], [BuildingTypeEnum.LUMBER_MILL, BuildingTypeEnum.STONE_QUARRY]));
+            [new StockMission("Collect 5 stones", RessourceTypeEnum.STONE, 5)], [BuildingTypeEnum.LUMBER_MILL, BuildingTypeEnum.STONE_QUARRY],
+            "stoneQuarryPlan"));
     }
 
-    public static getInstance(): LevelFactory {
-        if (!LevelFactory.instance)
-            LevelFactory.instance = new LevelFactory();
-        return LevelFactory.instance;
+    public static getInstance(): LevelConfig {
+        if (!LevelConfig.instance)
+            LevelConfig.instance = new LevelConfig();
+        return LevelConfig.instance;
     }
 
     public getLevel(number: number | undefined): LevelPrototype {
@@ -43,4 +47,4 @@ export class LevelFactory {
     }*/
 }
 
-export default LevelFactory;
+export default LevelConfig;

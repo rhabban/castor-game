@@ -28,7 +28,9 @@ export class BuildingPrototype extends ACommonPrototype {
 
     workersId: Array<string>;
 
-    constructor(name: string, type: BuildingTypeEnum, ressourceTypeOut: RessourceTypeEnum, quantityOut: number, ressourceTypeIn: RessourceTypeEnum, quantityIn: number, cost: RessourcePrototype) {
+    className: string;
+
+    constructor(name: string, type: BuildingTypeEnum, ressourceTypeOut: RessourceTypeEnum, quantityOut: number, ressourceTypeIn: RessourceTypeEnum, quantityIn: number, cost: RessourcePrototype, className: string) {
         super(name);
 
         this.type = type;
@@ -39,6 +41,7 @@ export class BuildingPrototype extends ACommonPrototype {
         this.isEnabled = false;
         this.workersId = [];
         this.cost = cost;
+        this.className = className;
     }
 
     public getImageSrc() {

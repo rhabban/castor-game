@@ -4,7 +4,7 @@ import BuildingCard from "./BuildingCard";
 import BuildingPlan from "./BuildingPlanCard";
 import BuildingFactory from "./model/BuildingFactory";
 import GameContext from "../../context/GameContext";
-import LevelFactory from "../level/LevelFactory";
+import LevelConfig from "../level/LevelConfig";
 
 const Buildings = () => {
 
@@ -13,7 +13,7 @@ const Buildings = () => {
     const gameContext = useContext(GameContext);
 
     const availableBuilding = useMemo(
-        () => LevelFactory.getInstance().getLevel(gameContext?.level).availableBuildings, [gameContext?.level]);
+        () => LevelConfig.getInstance().getLevel(gameContext?.level).availableBuildings, [gameContext?.level]);
 
 
     const buildingPrototypePlans = useMemo(() => {

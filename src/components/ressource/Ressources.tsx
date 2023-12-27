@@ -43,40 +43,42 @@ const Ressources = () => {
                 }
             })
     }
-    return <>
+    return <div className={"ressources"}>
         <h3>Ressources</h3>
+        <div>
 
-        <table className={"table table-sm"}>
-            <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {
-                ressources?.map((ressource) => (
-                    <tr key={ressource.type}>
-                        <td>
-                            <img alt={ressource.type} src={process.env.PUBLIC_URL + ressource.getImageSrc()}
-                                 style={{width: "30px"}}/>&nbsp; {ressource.type}</td>
-                        <td>{ressource.quantity}</td>
-                        <td>
-                            <button onClick={() => onClickAdd(ressource.type, 10)}
-                                    className={!gameContext?.isProcessing ? "btn btn-sm btn-success" : "btn btn-sm btn-success disabled"}>+10
-                            </button>
-                            &nbsp;
-                            <button onClick={() => onClickRemove(ressource.type, 5)}
-                                    className={!gameContext?.isProcessing ? "btn btn-sm btn-danger" : "btn btn-sm btn-danger disabled"}>-5
-                            </button>
-                        </td>
-                    </tr>
-                ))
-            }
-            </tbody>
-        </table>
-    </>
+            <table className={"table table-sm"}>
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {
+                    ressources?.map((ressource) => (
+                        <tr key={ressource.type}>
+                            <td>
+                                <img alt={ressource.type} src={process.env.PUBLIC_URL + ressource.getImageSrc()}
+                                     style={{width: "30px"}}/>&nbsp; {ressource.type}</td>
+                            <td>{ressource.quantity}</td>
+                            <td>
+                                <button onClick={() => onClickAdd(ressource.type, 10)}
+                                        className={!gameContext?.isProcessing ? "btn btn-sm btn-success" : "btn btn-sm btn-success disabled"}>+10
+                                </button>
+                                &nbsp;
+                                <button onClick={() => onClickRemove(ressource.type, 5)}
+                                        className={!gameContext?.isProcessing ? "btn btn-sm btn-danger" : "btn btn-sm btn-danger disabled"}>-5
+                                </button>
+                            </td>
+                        </tr>
+                    ))
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 }
 export default Ressources;

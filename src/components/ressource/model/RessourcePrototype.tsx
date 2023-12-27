@@ -5,6 +5,27 @@ export interface RessourceWithQuantity {
     quantity: number
 }
 
+export class RessourceWithQuantityList {
+    public ressourceWithQuantityList: Array<RessourceWithQuantity>;
+
+    public constructor() {
+        this.ressourceWithQuantityList = [];
+    }
+
+    public add(ressourceWithQuantity: RessourceWithQuantity) {
+        let foundInList = false;
+
+        this.ressourceWithQuantityList.forEach((element => {
+            if (element.type === ressourceWithQuantity.type) {
+                element.quantity = element.quantity + ressourceWithQuantity.quantity
+                foundInList = true
+            }
+        }))
+        if (!foundInList)
+            this.ressourceWithQuantityList.push(ressourceWithQuantity);
+    }
+}
+
 export enum RessourceTypeEnum {
     WOOD = "Wood",
     PLANK = "Plank",

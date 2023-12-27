@@ -28,7 +28,7 @@ const initSequence: ISequence = {
     level: 0,
 }
 
-function Game({setEndGame}: { setEndGame: Function }) {
+function Game({setEndGame, isCheatEnable}: { setEndGame: Function, isCheatEnable: boolean }) {
 
     const workerList = useAppSelector((state) => state.workers);
     const dispatch = useAppDispatch();
@@ -98,7 +98,13 @@ function Game({setEndGame}: { setEndGame: Function }) {
     return (
         <>
             <GameContext.Provider
-                value={{turn: turn, isProcessing: isProcessing, availableWorkers: availableWorkers, level: level}}>
+                value={{
+                    turn: turn,
+                    isProcessing: isProcessing,
+                    availableWorkers: availableWorkers,
+                    level: level,
+                    isCheatEnable: isCheatEnable
+                }}>
                 <div className="container">
                     <div className="row">
                         <div className="col-3">

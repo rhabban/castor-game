@@ -10,6 +10,7 @@ export interface IGameContext {
     isProcessing: boolean;
     availableWorkers: IWorker[];
     level: number;
+    isCheatEnable: boolean;
 }
 
 const GameContext = createContext<IGameContext | undefined>(undefined);

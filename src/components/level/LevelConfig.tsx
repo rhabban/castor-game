@@ -17,7 +17,7 @@ export class LevelConfig {
             ".lumberCamp"));
         this.levelPrototypeMap.set(1, new LevelPrototype(0, "Good job !\n" +
             " Now you can cut some wood with this affected worker",
-            [new StockMission("Collect 15 wood", RessourceTypeEnum.WOOD, 15)],
+            [new StockMission("Collect 20 wood", RessourceTypeEnum.WOOD, 20)],
             [],
             ".ressources"));
         this.levelPrototypeMap.set(2, new LevelPrototype(1, "Fine, you know now how to collect" +

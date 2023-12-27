@@ -25,7 +25,6 @@ const BuildingCard = ({building}: { building: BuildingPrototype }) => {
                         <br/>
                         {building.quantityIn !== 0 ? <> - {building.isEnabled ? building.quantityIn : 0} {building.ressourceTypeIn}</> : <></>}
                     </h6>
-
                     <div>
                         <p
                             className="card-text"></p>

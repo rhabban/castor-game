@@ -15,6 +15,7 @@ import {RessourceError} from "../error/customErrors";
 import {wait} from "../helpers/commonHelpers";
 import LevelConfig from "../components/level/LevelConfig";
 import {ActiveBuildingMission, StockMission} from "../components/mission/Missions";
+import {RessourceTypeEnum} from "../components/ressource/model/RessourcePrototype";
 
 
 export interface ISequence {
@@ -69,13 +70,14 @@ export default function useHandleTurn(sequence: ISequence) {
             setIsProcessing(true);
             fireTurnIsProcessing();
 
+            let deltaRessource = new Map<RessourceTypeEnum, number>();
             (async () => {
                 await wait(1000);
                 const endTurnRessource = ressources.slice();
-                calculateRessources();
+                calculateRessources(deltaRessource);
                 return 42
             })().then((res) => {
-                fireEndTourEvent(sequence.turn)
+                fireEndTourEvent(sequence.turn, deltaRessource)
                 setTurn(sequence.turn + 1)
             }).catch((err) => {
                 if (err instanceof RessourceError) {
@@ -90,7 +92,7 @@ export default function useHandleTurn(sequence: ISequence) {
         }
     }
 
-    const calculateRessources = () => {
+    const calculateRessources = (deltaRessource: Map<RessourceTypeEnum, number>) => {
         buildingList.forEach(building => {
             if (building.isEnabled) {
                 dispatch(decrementRessource({
@@ -98,12 +100,13 @@ export default function useHandleTurn(sequence: ISequence) {
                     quantity: building.quantityIn
                 }))
                 dispatch(addGameEvent(new GameEventEntity(building.name + " consomme " + building.quantityIn + " " + building.ressourceTypeIn, "decrementRessource", turn)))
-
+                deltaRessource.set(building.ressourceTypeIn, building.quantityIn)
                 dispatch(incrementRessource({
                     ressourceType: building.ressourceTypeOut,
                     quantity: building.quantityOut
                 }))
                 dispatch(addGameEvent(new GameEventEntity(building.name + " produit " + building.quantityOut + " " + building.ressourceTypeOut, "incrementRessource", turn)))
+                deltaRessource.set(building.ressourceTypeOut, building.quantityOut)
             }
         })
     }

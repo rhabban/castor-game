@@ -49,12 +49,12 @@ const BuildingPlanCard = ({buildingPlan}: { buildingPlan: BuildingPrototype }) =
 
     return (
         <>
-            <div className={"card mb-1 planCard col-11 " + buildingPlan.className + "Plan"}>
+            <div className={"card mb-2 planCard col-11 " + buildingPlan.className + "Plan"}>
                 <div className="row">
                     <div className="col-3 g-0">
                         <img
                             src={process.env.PUBLIC_URL + buildingPlan.getImageSrc()}
-                            className={"card-img"} alt="..."/>
+                            className={"card-img"} style={{width: "auto", height: "160px"}} alt="..."/>
                     </div>
                     <div className="col-9">
                         <div className="card-body">

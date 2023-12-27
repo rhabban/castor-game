@@ -6,7 +6,6 @@ import RessourceFactory from "./model/RessourceFactory";
 const initRessources = () => {
     return new Array<RessourcePrototype>(
         RessourceFactory.getInstance().getPrototype(RessourceTypeEnum.WOOD).cloneWithSpecificQuantity(5),
-        RessourceFactory.getInstance().getPrototype(RessourceTypeEnum.PLANK).cloneWithSpecificQuantity(1),
     )
 }
 
@@ -35,7 +34,7 @@ const ressourcesSlice = createSlice({
                     const newQty = ressource.quantity - action.payload.quantity;
 
                     if (newQty < 0)
-                        throw new RessourceError("Not enough " + action.payload.ressourceType, action.payload.ressourceType);
+                        throw new RessourceError("Not enough " + action.payload.ressourceType + ". You need to gather more resources", action.payload.ressourceType);
 
                     ressource = RessourceFactory.getInstance().getPrototype(ressource.type).cloneWithSpecificQuantity(newQty)
                     isNewRessource = false;

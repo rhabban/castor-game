@@ -22,7 +22,7 @@ export class BuildingFactory {
         this.buildingPrototypeMap.set(BuildingTypeEnum.STONE_QUARRY, new BuildingPrototype(
             BuildingTypeEnum.STONE_QUARRY.toString(), BuildingTypeEnum.STONE_QUARRY, RessourceTypeEnum.STONE, 1,
             RessourceTypeEnum.STONE, 0,
-            RessourceFactory.getInstance().getPrototype(RessourceTypeEnum.PLANK).cloneWithSpecificQuantity(5),
+            RessourceFactory.getInstance().getPrototype(RessourceTypeEnum.PLANK).cloneWithSpecificQuantity(2),
             "stoneQuarry"));
     }
 

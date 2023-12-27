@@ -16,10 +16,10 @@ import {resetMissionList, setMissions} from "./components/mission/MissionsSlice"
 import {resetRessource} from "./components/ressource/ressourcesSlice";
 import {resetWorkerList} from "./components/worker/workersSlice";
 import {FaDoorOpen} from "react-icons/fa";
-import {resetBuildingList} from "./components/building/buildingSlice";
 import {fireNewlevel} from "./helpers/swalHelpers";
 import LevelConfig from "./components/level/LevelConfig";
 import LevelPrototype from "./components/level/LevelPrototype";
+import {resetBuildingList} from "./components/building/buildingSlice";
 
 const initSequence: ISequence = {
     turn: 0,
@@ -48,9 +48,15 @@ function Game({setEndGame}: { setEndGame: Function }) {
         dispatch(resetRessource());
         dispatch(resetWorkerList());
         dispatch(resetMissionList());
-        dispatch(resetBuildingList());
         dispatch(resetGameEvent());
+
+        (async () => {
+            dispatch(resetBuildingList())
+        })().then(() => highlightElement()
+        )
+
         setSequence(initSequence);
+
     }, []);
 
     useEffect(() => {
@@ -61,6 +67,10 @@ function Game({setEndGame}: { setEndGame: Function }) {
     }, [isTerminated]);
 
     useEffect(() => {
+        highlightElement();
+    }, [level]);
+
+    const highlightElement = () => {
         const newLevel: LevelPrototype = LevelConfig.getInstance().getLevel(level)
         fireNewlevel(newLevel.description)
         dispatch(setMissions(newLevel.missions))
@@ -74,7 +84,7 @@ function Game({setEndGame}: { setEndGame: Function }) {
         if (elementToHighlight && elementToHighlight[0]) {
             elementToHighlight[0].classList.add("highlightedBox")
         }
-    }, [level]);
+    }
 
     const onClickPlayTurn = () => {
         dispatch(addGameEvent(new GameEventEntity("Fin du tour demandé", "turn", turn)))

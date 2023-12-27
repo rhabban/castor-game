@@ -1,10 +1,17 @@
 import Swal from "sweetalert2";
 import {IMission} from "../components/mission/Missions";
+import {RessourceTypeEnum} from "../components/ressource/model/RessourcePrototype";
 
-export const fireEndTourEvent = (turn: number) => {
+export const fireEndTourEvent = (turn: number, delta: Map<RessourceTypeEnum, number>) => {
+
+    let deltaRessources = new Array<string>();
+    delta.forEach((value, key) => {
+        deltaRessources.push(value + ' ' + key)
+    })
+
     Swal.fire({
         icon: 'success',
-        text: 'You have successfully played turn ' + turn + ' !',
+        text: 'You have successfully played turn ' + turn + ' ! You have generated ' + deltaRessources.join(','),
         toast: true,
         position: 'center'
     })
